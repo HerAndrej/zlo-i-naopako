@@ -1,8 +1,10 @@
+
 "use client";
 
 import { useState } from 'react';
 import { LucideFlame } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useCart } from '@/context/CartContext';
 
 const SAUCES = {
     smokisa: {
@@ -15,7 +17,7 @@ const SAUCES = {
         image: '/smokisa_final.png',
         heat: 3,
         bestWith: 'burger, krompiriće, sendviče, jaja, roštilj.',
-        price: '650'
+        price: 650
     },
     congo: {
         id: 'congo',
@@ -27,7 +29,7 @@ const SAUCES = {
         image: '/congo.png',
         heat: 4,
         bestWith: 'tacos, piletinu, pizzu, testeninu, grilovano povrće.',
-        price: '700'
+        price: 700
     },
     bafalo: {
         id: 'bafalo',
@@ -39,7 +41,7 @@ const SAUCES = {
         image: '/bafalo_final.png',
         heat: 3,
         bestWith: 'pileća krilca, burger, onion rings, pržene krompiriće, sendviče.',
-        price: '750'
+        price: 750
     },
     trio: {
         id: 'trio',
@@ -51,20 +53,20 @@ const SAUCES = {
         image: '/svi.png',
         heat: 5,
         bestWith: 'bukvalno sve. Od doručka do večere, od roštilja do pizze.',
-        price: '1.890',
-        oldPrice: '2.100'
+        price: 1890,
+        oldPrice: 2100
     }
 };
 
 interface SaucesProps {
     onSauceChange: (color: string) => void;
-    onOrder: (product: string) => void;
 }
 
-export default function Sauces({ onSauceChange, onOrder }: SaucesProps) {
+export default function Sauces({ onSauceChange }: SaucesProps) {
     const [activeSauce, setActiveSauce] = useState<keyof typeof SAUCES>('smokisa');
     const [isAnimating, setIsAnimating] = useState(false);
     const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.1 });
+    const { addToCart } = useCart();
 
     const handleSelect = (key: keyof typeof SAUCES) => {
         if (key === activeSauce) return;
@@ -74,6 +76,16 @@ export default function Sauces({ onSauceChange, onOrder }: SaucesProps) {
             onSauceChange(SAUCES[key].color);
             setIsAnimating(false);
         }, 300);
+    };
+
+    const handleAddToCart = () => {
+        const s = SAUCES[activeSauce];
+        addToCart({
+            id: s.id,
+            name: s.name,
+            image: s.image,
+            price: s.price,
+        });
     };
 
     const sauce = SAUCES[activeSauce];
@@ -181,9 +193,9 @@ export default function Sauces({ onSauceChange, onOrder }: SaucesProps) {
                             <div>
                                 <span className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Cena</span>
                                 {isTrio && (sauce as any).oldPrice && (
-                                    <span className="block text-gray-500 line-through text-base">{(sauce as any).oldPrice} RSD</span>
+                                    <span className="block text-gray-500 line-through text-base">{(sauce as any).oldPrice.toLocaleString('sr-RS')} RSD</span>
                                 )}
-                                <span className="text-2xl md:text-3xl font-bold">{sauce.price} <span className="text-sm font-normal text-gray-500">RSD</span></span>
+                                <span className="text-2xl md:text-3xl font-bold">{sauce.price.toLocaleString('sr-RS')} <span className="text-sm font-normal text-gray-500">RSD</span></span>
                             </div>
                             <div className="col-span-2">
                                 <span className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Najbolje uz</span>
@@ -192,7 +204,7 @@ export default function Sauces({ onSauceChange, onOrder }: SaucesProps) {
                         </div>
 
                         <button
-                            onClick={() => onOrder(isTrio ? 'Trio Paket (Sva tri sosa)' : `Sos ${sauce.name}`)}
+                            onClick={handleAddToCart}
                             className={`group w-full text-white font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all hover:scale-105 flex items-center justify-center gap-2 reveal-hidden ${isVisible ? 'reveal-scale stagger-6' : ''}`}
                             style={{
                                 backgroundColor: sauce.color,

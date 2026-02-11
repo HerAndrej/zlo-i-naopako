@@ -3,13 +3,20 @@
 
 import { Check, ArrowRight } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useCart } from '@/context/CartContext';
 
-interface SpecialOfferProps {
-    onOrder: (product: string) => void;
-}
-
-export default function SpecialOffer({ onOrder }: SpecialOfferProps) {
+export default function SpecialOffer() {
     const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.15 });
+    const { addToCart } = useCart();
+
+    const handleOrder = () => {
+        addToCart({
+            id: 'trio',
+            name: 'Trio Paket',
+            image: '/svi.png',
+            price: 1890,
+        });
+    };
 
     return (
         <section
@@ -58,7 +65,7 @@ export default function SpecialOffer({ onOrder }: SpecialOfferProps) {
                         </div>
 
                         <button
-                            onClick={() => onOrder('Trio Paket (Sva tri sosa)')}
+                            onClick={handleOrder}
                             className="group bg-primary hover:bg-red-700 text-white text-xl font-black py-5 px-10 rounded-full transition-all hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] hover:scale-105 flex items-center gap-3"
                         >
                             Naruči Sve
