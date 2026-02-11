@@ -33,25 +33,26 @@ export default function CheckoutModal() {
         setError('');
 
         try {
-            // 1. Kreiraj narudžbinu
-            const { data: order, error: orderError } = await supabase
+            // 1. Generiši UUID za narudžbinu (da izbegnemo RLS select problem)
+            const orderId = crypto.randomUUID();
+
+            const { error: orderError } = await supabase
                 .from('orders')
                 .insert({
+                    id: orderId,
                     customer_name: formData.name,
                     customer_phone: formData.phone,
                     customer_city: formData.city,
                     customer_address: formData.address,
                     total_amount: totalPrice,
                     status: 'pending',
-                })
-                .select('id')
-                .single();
+                });
 
             if (orderError) throw orderError;
 
             // 2. Kreiraj stavke narudžbine
             const orderItems = items.map(item => ({
-                order_id: order.id,
+                order_id: orderId,
                 product_id: item.id,
                 product_name: item.name,
                 quantity: item.quantity,
@@ -69,8 +70,9 @@ export default function CheckoutModal() {
             setStep(3);
             clearCart();
         } catch (err: unknown) {
-            console.error('Order error:', err);
-            setError('Došlo je do greške pri slanju narudžbine. Pokušaj ponovo.');
+            console.error('Order error:', JSON.stringify(err, null, 2));
+            const msg = err && typeof err === 'object' && 'message' in err ? (err as { message: string }).message : '';
+            setError(msg || 'Došlo je do greške pri slanju narudžbine. Pokušaj ponovo.');
         } finally {
             setIsSubmitting(false);
         }
