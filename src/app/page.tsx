@@ -11,6 +11,8 @@ import Contact from "@/components/sections/Contact";
 import Journey from "@/components/sections/Journey";
 import Founder from "@/components/sections/Founder";
 import Testimonials from "@/components/sections/Testimonials";
+import Link from "next/link";
+import { Lock } from 'lucide-react';
 import CheckoutModal from "@/components/ui/CheckoutModal";
 
 export default function Home() {
@@ -122,8 +124,11 @@ export default function Home() {
           <Testimonials />
           <Contact />
 
-          <footer className="py-8 text-center text-gray-500 text-sm bg-black relative z-10">
+          <footer className="py-8 text-center text-gray-500 text-sm bg-black relative z-10 flex flex-col gap-2 items-center justify-center">
             <p>© 2024 Zlo i naopako ljuti sosevi – vrući još od 2021.</p>
+            <Link href="/admin" className="opacity-10 hover:opacity-50 transition-opacity">
+              <Lock size={12} />
+            </Link>
           </footer>
         </div>
       </main>
