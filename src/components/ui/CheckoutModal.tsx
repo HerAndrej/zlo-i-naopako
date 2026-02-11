@@ -5,8 +5,15 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
 
+const PRODUCTS = [
+    { id: 'smokisa', name: 'Smokiša', price: 650, image: '/smokisa_final.png' },
+    { id: 'congo', name: 'Čongo', price: 700, image: '/congo.png' },
+    { id: 'bafalo', name: 'Bafalo', price: 750, image: '/bafalo_final.png' },
+    { id: 'trio', name: 'Trio Paket', price: 1890, image: '/svi.png' },
+];
+
 export default function CheckoutModal() {
-    const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, totalPrice } = useCart();
+    const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, totalPrice, addToCart } = useCart();
     const [step, setStep] = useState(1); // 1 = Cart, 2 = Form, 3 = Success
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -199,6 +206,35 @@ export default function CheckoutModal() {
                                             </div>
                                         ))}
                                     </div>
+
+                                    {/* Recommended Products (Quick Add) */}
+                                    {PRODUCTS.filter(p => !items.some(i => i.id === p.id)).length > 0 && (
+                                        <div className="mt-8 pt-6 border-t border-white/10">
+                                            <h4 className="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Probaj i ovo (brzo dodavanje)</h4>
+                                            <div className="space-y-3">
+                                                {PRODUCTS.filter(p => !items.some(i => i.id === p.id)).map(product => (
+                                                    <div key={product.id} className="flex items-center justify-between bg-white/[0.02] hover:bg-white/[0.05] p-2 pr-4 rounded-xl transition-colors group border border-transparent hover:border-white/5">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-12 h-12 rounded-lg bg-black/50 flex items-center justify-center p-1">
+                                                                <img src={product.image} alt={product.name} className="h-full w-auto object-contain" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-bold text-white text-sm">{product.name}</p>
+                                                                <p className="text-xs text-gray-500">{formatPrice(product.price)} RSD</p>
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => addToCart(product)}
+                                                            className="bg-white/10 hover:bg-primary text-white p-2 rounded-lg transition-colors"
+                                                            title="Dodaj u korpu"
+                                                        >
+                                                            <Plus size={16} />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* Total */}
                                     <div className="mt-6 pt-4 border-t border-white/10">
