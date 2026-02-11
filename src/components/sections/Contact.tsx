@@ -25,7 +25,7 @@ const CONTACT_ITEMS = [
 ];
 
 function ContactItem({ item, index }: { item: typeof CONTACT_ITEMS[0]; index: number }) {
-    const { ref, isVisible } = useScrollReveal({ threshold: 0.3 });
+    const { ref, isVisible } = useScrollReveal<HTMLAnchorElement>({ threshold: 0.3 });
     const Icon = item.icon;
 
     return (
