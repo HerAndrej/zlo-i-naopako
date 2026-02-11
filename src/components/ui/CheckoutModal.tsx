@@ -1,12 +1,15 @@
 "use client";
 
-import { X, Check, Minus, Plus, Trash2, ShoppingCart, ArrowLeft } from 'lucide-react';
+import { X, Check, Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
+import { supabase } from '@/lib/supabase';
 
 export default function CheckoutModal() {
     const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, totalPrice } = useCart();
     const [step, setStep] = useState(1); // 1 = Cart, 2 = Form, 3 = Success
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         name: '',
         address: '',
@@ -16,17 +19,61 @@ export default function CheckoutModal() {
 
     // Reset to cart step when opened
     useEffect(() => {
-        if (isOpen) setStep(1);
+        if (isOpen) {
+            setStep(1);
+            setError('');
+        }
     }, [isOpen]);
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setTimeout(() => {
+        setIsSubmitting(true);
+        setError('');
+
+        try {
+            // 1. Kreiraj narudžbinu
+            const { data: order, error: orderError } = await supabase
+                .from('orders')
+                .insert({
+                    customer_name: formData.name,
+                    customer_phone: formData.phone,
+                    customer_city: formData.city,
+                    customer_address: formData.address,
+                    total_amount: totalPrice,
+                    status: 'pending',
+                })
+                .select('id')
+                .single();
+
+            if (orderError) throw orderError;
+
+            // 2. Kreiraj stavke narudžbine
+            const orderItems = items.map(item => ({
+                order_id: order.id,
+                product_id: item.id,
+                product_name: item.name,
+                quantity: item.quantity,
+                unit_price: item.price,
+                total_price: item.price * item.quantity,
+            }));
+
+            const { error: itemsError } = await supabase
+                .from('order_items')
+                .insert(orderItems);
+
+            if (itemsError) throw itemsError;
+
+            // 3. Uspeh
             setStep(3);
             clearCart();
-        }, 800);
+        } catch (err: unknown) {
+            console.error('Order error:', err);
+            setError('Došlo je do greške pri slanju narudžbine. Pokušaj ponovo.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleAddMore = () => {
@@ -192,6 +239,12 @@ export default function CheckoutModal() {
                                 </p>
                             </div>
 
+                            {error && (
+                                <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
+                                    {error}
+                                </div>
+                            )}
+
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1 ml-2">Ime i Prezime</label>
@@ -252,9 +305,17 @@ export default function CheckoutModal() {
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-primary hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] mt-2"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-primary hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] mt-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
-                                    POTVRDI NARUDŽBINU
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 size={20} className="animate-spin" />
+                                            ŠALJEM...
+                                        </>
+                                    ) : (
+                                        'POTVRDI NARUDŽBINU'
+                                    )}
                                 </button>
                             </form>
                         </div>
