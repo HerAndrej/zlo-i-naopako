@@ -66,11 +66,7 @@ function ReviewCard({ review, index }: { review: typeof REVIEWS[0]; index: numbe
     );
 }
 
-interface TestimonialsProps {
-    onOrder: (product: string) => void;
-}
-
-export default function Testimonials({ onOrder }: TestimonialsProps) {
+export default function Testimonials() {
     const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.3 });
     const scrollRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -147,13 +143,13 @@ export default function Testimonials({ onOrder }: TestimonialsProps) {
 
                 {/* CTA */}
                 <div className="text-center mt-10 md:mt-14">
-                    <button
-                        onClick={() => onOrder('Trio Paket (Sva tri sosa)')}
+                    <a
+                        href="#sosevi"
                         className="group bg-primary text-white font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] inline-flex items-center gap-2"
                     >
                         I ja hoću da probam
                         <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>

@@ -120,23 +120,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Floating Mobile CTA */}
-      <a
-        href="#sosevi"
-        className={`fixed bottom-5 right-5 z-40 md:hidden bg-primary text-white font-bold text-sm py-3 px-5 rounded-full shadow-[0_4px_20px_rgba(220,38,38,0.5)] hover:scale-105 transition-all duration-500 ${scrollY > 300 ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
-      >
-        🌶️ Kupi Odmah
-      </a>
-
       {/* Scrollable Content */}
       <div className="relative z-10" suppressHydrationWarning>
         <Hero />
         <Journey />
-        <Founder onOrder={handleOrder} />
+        <Founder />
         <Sauces onSauceChange={setActiveColor} onOrder={handleOrder} />
 
         <Story />
-        <Testimonials onOrder={handleOrder} />
+        <Testimonials />
         <Contact />
 
         <footer className="py-8 text-center text-gray-500 text-sm bg-black relative z-10">

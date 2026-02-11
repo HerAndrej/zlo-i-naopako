@@ -9,11 +9,7 @@ const STATS = [
     { icon: Heart, value: '∞', label: 'Ljubav prema ljutom' },
 ];
 
-interface FounderProps {
-    onOrder: (product: string) => void;
-}
-
-export default function Founder({ onOrder }: FounderProps) {
+export default function Founder() {
     const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.15 });
 
     return (
@@ -90,13 +86,13 @@ export default function Founder({ onOrder }: FounderProps) {
                         </div>
 
                         {/* CTA */}
-                        <button
-                            onClick={() => onOrder('Trio Paket (Sva tri sosa)')}
+                        <a
+                            href="#sosevi"
                             className={`group w-full md:w-auto bg-primary text-white font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-2 reveal-hidden ${isVisible ? 'reveal-scale stagger-5' : ''}`}
                         >
                             Probaj moje soseve
                             <span className="text-xl transition-transform group-hover:translate-x-1">🌶️</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
