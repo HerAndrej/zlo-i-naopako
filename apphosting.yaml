@@ -1,0 +1,5 @@
+env:
+  - variable: NEXT_PUBLIC_SUPABASE_URL
+    value: https://ijigcmkemfnieqqhjcup.supabase.co
+  - variable: NEXT_PUBLIC_SUPABASE_ANON_KEY
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqaWdjbWtlbWZuaWVxcWhqY3VwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3Mzc2MjEsImV4cCI6MjA4NjMxMzYyMX0._YJ2W2G3MEtc0y8UGtgMlgpUs-mP0UI653NScQ-AY1Q
