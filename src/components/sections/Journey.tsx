@@ -157,6 +157,17 @@ export default function Journey() {
                         <JourneyItem key={i} ev={ev} i={i} isActive={i === activeIndex} />
                     ))}
                 </div>
+
+                {/* CTA */}
+                <div className="text-center mt-16 md:mt-24">
+                    <a
+                        href="#sosevi"
+                        className="group bg-white text-black font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-10 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] inline-flex items-center gap-2"
+                    >
+                        Probaj naše soseve
+                        <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+                    </a>
+                </div>
             </div>
         </section>
     );

@@ -66,7 +66,11 @@ function ReviewCard({ review, index }: { review: typeof REVIEWS[0]; index: numbe
     );
 }
 
-export default function Testimonials() {
+interface TestimonialsProps {
+    onOrder: (product: string) => void;
+}
+
+export default function Testimonials({ onOrder }: TestimonialsProps) {
     const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.3 });
     const scrollRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -139,6 +143,17 @@ export default function Testimonials() {
                             <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/20" />
                         ))}
                     </div>
+                </div>
+
+                {/* CTA */}
+                <div className="text-center mt-10 md:mt-14">
+                    <button
+                        onClick={() => onOrder('Trio Paket (Sva tri sosa)')}
+                        className="group bg-primary text-white font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] inline-flex items-center gap-2"
+                    >
+                        I ja hoću da probam
+                        <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+                    </button>
                 </div>
             </div>
         </section>

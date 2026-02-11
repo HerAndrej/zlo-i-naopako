@@ -8,9 +8,8 @@ import Sauces from "@/components/sections/Sauces";
 import Story from "@/components/sections/Story";
 import Contact from "@/components/sections/Contact";
 import Journey from "@/components/sections/Journey";
-
+import Founder from "@/components/sections/Founder";
 import Testimonials from "@/components/sections/Testimonials";
-
 import CheckoutModal from "@/components/ui/CheckoutModal";
 
 export default function Home() {
@@ -58,13 +57,19 @@ export default function Home() {
         </a>
 
         {/* Desktop nav links */}
-        <div className="hidden md:flex gap-8 font-medium">
+        <div className="hidden md:flex gap-8 font-medium items-center">
           {navLinks.map(link => (
             <a key={link.href} href={link.href} className="hover:text-primary transition-colors relative group">
               {link.label}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
+          <a
+            href="#sosevi"
+            className="bg-primary text-white font-bold text-sm py-2 px-5 rounded-full hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all duration-300 ml-2"
+          >
+            Kupi Odmah
+          </a>
         </div>
 
         {/* Mobile hamburger button */}
@@ -115,14 +120,23 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Floating Mobile CTA */}
+      <a
+        href="#sosevi"
+        className={`fixed bottom-5 right-5 z-40 md:hidden bg-primary text-white font-bold text-sm py-3 px-5 rounded-full shadow-[0_4px_20px_rgba(220,38,38,0.5)] hover:scale-105 transition-all duration-500 ${scrollY > 300 ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
+      >
+        🌶️ Kupi Odmah
+      </a>
+
       {/* Scrollable Content */}
       <div className="relative z-10" suppressHydrationWarning>
         <Hero />
         <Journey />
+        <Founder onOrder={handleOrder} />
         <Sauces onSauceChange={setActiveColor} onOrder={handleOrder} />
 
         <Story />
-        <Testimonials />
+        <Testimonials onOrder={handleOrder} />
         <Contact />
 
         <footer className="py-8 text-center text-gray-500 text-sm bg-black relative z-10">

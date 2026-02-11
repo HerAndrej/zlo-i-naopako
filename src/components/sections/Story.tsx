@@ -123,6 +123,16 @@ export default function Story() {
                 ))}
             </div>
 
+            {/* Persistent CTA at bottom of story scroll */}
+            <div className="sticky bottom-6 z-20 flex justify-center pointer-events-none">
+                <a
+                    href="#sosevi"
+                    className="pointer-events-auto bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold text-sm md:text-base py-3 px-6 md:px-8 rounded-full hover:bg-primary hover:border-primary hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+                >
+                    🌶️ Kupi odmah
+                </a>
+            </div>
+
         </section>
     );
 }
