@@ -60,7 +60,7 @@ export default function Story() {
                         key={section.id}
                         className={`absolute inset-0 transition-all duration-1000 ease-in-out ${idx === activeIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
                     >
-                        <div className="absolute inset-0 bg-black/60 z-10" />
+                        <div className="absolute inset-0 bg-black/70 md:bg-black/60 z-10" />
                         <img
                             src={section.image}
                             alt={section.title}
@@ -75,7 +75,7 @@ export default function Story() {
                 {SECTIONS.map((section, idx) => (
                     <div
                         key={section.id}
-                        className="story-section min-h-screen flex items-center justify-start px-6 md:px-24"
+                        className="story-section min-h-screen flex items-center justify-start px-4 md:px-24"
                     >
                         <div
                             className="max-w-2xl"
@@ -89,7 +89,7 @@ export default function Story() {
                             }}
                         >
                             <span
-                                className="text-primary font-bold tracking-[0.2em] uppercase mb-4 block"
+                                className="text-primary font-bold tracking-[0.15em] md:tracking-[0.2em] uppercase mb-3 md:mb-4 block text-sm md:text-base"
                                 style={{
                                     opacity: idx === activeIndex ? 1 : 0,
                                     transform: idx === activeIndex ? 'translateX(0)' : 'translateX(-30px)',
@@ -99,7 +99,7 @@ export default function Story() {
                                 {section.highlight}
                             </span>
                             <h2
-                                className="text-5xl md:text-8xl font-black mb-8 leading-[0.9] text-white"
+                                className="text-3xl md:text-8xl font-black mb-5 md:mb-8 leading-[0.95] md:leading-[0.9] text-white"
                                 style={{
                                     opacity: idx === activeIndex ? 1 : 0,
                                     transform: idx === activeIndex ? 'translateY(0)' : 'translateY(40px)',
@@ -109,7 +109,7 @@ export default function Story() {
                                 {section.title}
                             </h2>
                             <p
-                                className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed"
+                                className="text-base md:text-2xl text-gray-300 font-light leading-relaxed"
                                 style={{
                                     opacity: idx === activeIndex ? 1 : 0,
                                     transform: idx === activeIndex ? 'translateY(0)' : 'translateY(30px)',

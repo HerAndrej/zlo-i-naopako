@@ -17,12 +17,20 @@ export default function Home() {
   const [activeColor, setActiveColor] = useState('#F59E0B');
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrollY = useScrollPosition();
 
   const handleOrder = (product: string) => {
     setSelectedProduct(product);
     setIsCheckoutOpen(true);
   };
+
+  const navLinks = [
+    { href: '#sosevi', label: 'Sosevi' },
+    { href: '#o-nama', label: 'O nama' },
+    { href: '#kako-pravimo', label: 'Proces' },
+    { href: '#kontakt', label: 'Kontakt' },
+  ];
 
   return (
     <main className="relative w-full min-h-screen" suppressHydrationWarning>
@@ -33,7 +41,7 @@ export default function Home() {
         selectedProduct={selectedProduct}
       />
 
-      {/* Navbar - scroll-aware with blur transition */}
+      {/* Navbar */}
       <nav
         className={`fixed top-0 left-0 w-full px-6 flex justify-between items-center z-50 text-white transition-all duration-500 ${scrollY > 80
           ? 'py-3 navbar-scrolled'
@@ -48,25 +56,64 @@ export default function Home() {
             className={`w-auto object-contain transition-all duration-500 ${scrollY > 80 ? 'h-8 md:h-10' : 'h-10 md:h-12'}`}
           />
         </a>
+
+        {/* Desktop nav links */}
         <div className="hidden md:flex gap-8 font-medium">
-          <a href="#sosevi" className="hover:text-primary transition-colors relative group">
-            Sosevi
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-          </a>
-          <a href="#o-nama" className="hover:text-primary transition-colors relative group">
-            O nama
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-          </a>
-          <a href="#kako-pravimo" className="hover:text-primary transition-colors relative group">
-            Proces
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-          </a>
-          <a href="#kontakt" className="hover:text-primary transition-colors relative group">
-            Kontakt
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+          {navLinks.map(link => (
+            <a key={link.href} href={link.href} className="hover:text-primary transition-colors relative group">
+              {link.label}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+            </a>
+          ))}
+        </div>
+
+        {/* Mobile hamburger button */}
+        <button
+          className="md:hidden relative w-8 h-8 flex flex-col justify-center items-center gap-1.5 z-[60]"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Menu"
+        >
+          <span className={`block w-6 h-0.5 bg-white transition-all duration-300 origin-center ${mobileMenuOpen ? 'rotate-45 translate-y-[4px]' : ''}`} />
+          <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100'}`} />
+          <span className={`block w-6 h-0.5 bg-white transition-all duration-300 origin-center ${mobileMenuOpen ? '-rotate-45 -translate-y-[4px]' : ''}`} />
+        </button>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`fixed inset-0 z-[45] md:hidden transition-all duration-500 ${mobileMenuOpen ? 'visible' : 'invisible'}`}
+      >
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/95 backdrop-blur-xl transition-opacity duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'}`}
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        {/* Menu Content */}
+        <div className={`relative z-10 flex flex-col items-center justify-center h-full gap-8 transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          {navLinks.map((link, i) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-3xl font-black uppercase tracking-wider text-white hover:text-primary transition-all duration-300"
+              style={{ transitionDelay: mobileMenuOpen ? `${i * 80}ms` : '0ms' }}
+            >
+              {link.label}
+            </a>
+          ))}
+
+          <div className="mt-8 w-12 h-0.5 bg-primary/50" />
+
+          <a
+            href="#sosevi"
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-4 bg-primary text-white font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform"
+          >
+            Naruči Odmah →
           </a>
         </div>
-      </nav>
+      </div>
 
       {/* Scrollable Content */}
       <div className="relative z-10" suppressHydrationWarning>
