@@ -1,13 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <!-- Stem -->
-  <path d="M16 2 C17 1 19 1 19 3 C19 4 18 5 17 5.5" fill="none" stroke="#4a7c3f" stroke-width="1.5" stroke-linecap="round"/>
-  <!-- Leaf -->
-  <path d="M17 4 Q20 2 21 5 Q19 6 17 5" fill="#4a7c3f"/>
-  <!-- Pepper body - chili shape, curved and pointed at bottom -->
-  <path d="M13 6 C10 7 9 11 9 15 C9 20 11 25 14 28 C15 29.5 17 29.5 18 28 C21 25 23 20 23 15 C23 11 22 7 19 6 C18 5.5 14 5.5 13 6 Z"
-        fill="#DC2626" stroke="#991b1b" stroke-width="0.6"/>
-  <!-- Sheen/highlight -->
-  <path d="M13 8 C12 10 11.5 14 12 18" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
-  <!-- Tip point -->
-  <path d="M14 28 C15 30 17 31 18 28" fill="#b91c1c"/>
+  <!-- Stem (zeleni peteljka) -->
+  <path d="M18 3 C19 1 22 1 22 3 C22 5 20 5.5 18.5 5" fill="none" stroke="#3a7d2c" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Mali list -->
+  <path d="M18.5 5 Q22 3 23 6 Q20.5 7 18.5 5.5 Z" fill="#4a9c38"/>
+  <!-- Tijelo paprike - tanka dugačka čili forma, blago zakrivljena -->
+  <path d="M16.5 5
+           C15 5.5 13 7 12 10
+           C11 13 10.5 17 11 21
+           C11.5 24.5 13 27.5 15 29.5
+           C15.8 30.5 17 30 17.5 29
+           C19 26.5 19.5 23 19.5 20
+           C20 16 20 12 19 9
+           C18.5 7 17.5 5.5 16.5 5 Z"
+        fill="url(#pepperGrad)" stroke="#b91c1c" stroke-width="0.5"/>
+  <!-- Gradient za realnost -->
+  <defs>
+    <linearGradient id="pepperGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#b91c1c"/>
+      <stop offset="35%" style="stop-color:#ef4444"/>
+      <stop offset="65%" style="stop-color:#dc2626"/>
+      <stop offset="100%" style="stop-color:#991b1b"/>
+    </linearGradient>
+  </defs>
+  <!-- Sjaj/highlight lijeva strana -->
+  <path d="M14 8 C13 11 12.5 15 13 20" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Vrh/šiljak paprike -->
+  <path d="M15 29.5 C15.5 31.5 17 32 17.5 29" fill="#991b1b" stroke="none"/>
 </svg>
