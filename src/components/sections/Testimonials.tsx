@@ -49,7 +49,7 @@ function ReviewCard({ review, index }: { review: typeof REVIEWS[0]; index: numbe
                 ))}
             </div>
 
-            <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6 md:mb-8 font-light italic">
+            <p className="text-gray-300 text-sm md:text-base lg:text-lg leading-relaxed mb-6 md:mb-8 font-light italic">
                 &ldquo;{review.text}&rdquo;
             </p>
 
@@ -103,9 +103,24 @@ export default function Testimonials() {
                     <span className={`text-gray-500 font-bold tracking-widest uppercase mb-3 block text-xs md:text-sm reveal-hidden ${headerVisible ? 'reveal-up' : ''}`}>
                         Zid Plača (od sreće)
                     </span>
-                    <h2 className={`text-3xl md:text-6xl font-black text-white mb-4 reveal-hidden ${headerVisible ? 'reveal-up stagger-1' : ''}`}>
+                    <h2 className={`text-3xl md:text-5xl font-black text-white mb-4 reveal-hidden ${headerVisible ? 'reveal-up stagger-1' : ''}`}>
                         REČI PREŽIVELIH
                     </h2>
+                    {/* Stats badges */}
+                    <div className={`flex items-center justify-center gap-4 flex-wrap mt-4 reveal-hidden ${headerVisible ? 'reveal-up stagger-2' : ''}`}>
+                        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2">
+                            <span className="text-2xl font-black text-primary">150+</span>
+                            <span className="text-gray-400 text-sm font-medium">zadovoljnih kupaca</span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2">
+                            <div className="flex gap-0.5">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                    <Star key={i} size={14} fill="#EAB308" className="text-yellow-500" />
+                                ))}
+                            </div>
+                            <span className="text-gray-400 text-sm font-medium">svuda 5 zvezda</span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Mobile: horizontal scroll, Desktop: grid */}

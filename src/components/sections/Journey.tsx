@@ -7,37 +7,37 @@ const EVENTS = [
     {
         year: '2021',
         title: 'Početak',
-        desc: 'Prva tura kuvana u kućnom loncu. Testirano na najhrabrijim prijateljima. Etikete lepljene ručno, često krivo, ali sa puno ljubavi. Nismo znali šta radimo — ali smo znali kako treba da bude ljuto.',
+        desc: 'Prvi ljuti sos napravljen slučajno, testiran na prijateljima. Nismo znali šta radimo ali smo znali da je jako dobro.',
         image: '/1.jpeg'
     },
     {
         year: '2022',
         title: 'Eksperiment',
-        desc: 'Otkrivanje tajni fermentacije. Bacili smo 50kg paprike da bismo dobili pravi ukus. Dimili smo paprike danima dok komšije nisu poludele. Kuhinja je postala laboratorija, a mi naučnici u kecelja.',
+        desc: 'Probavanje iznova i iznova kako bi se dobio savršen ukus i ljutina. Dosta bačene paprike, dosta nerviranja ali nije bilo odustajanja.',
         image: '/4.jpeg'
     },
     {
         year: '2023',
         title: 'Širenje',
-        desc: 'Nove recepture, ozbiljnija oprema. Zlo postaje prepoznatljivo. Nastaje Čongo i Bafalo kao odgovor na "hoćemo još". Prva saradnja sa restoranima i prvi put da nas neko van ekipe traži po imenu.',
+        desc: 'Eksperimentisanjem dobijamo još 2 ljuta sosa. Nastaju Čongo i Bafalo.',
         image: '/IMG_20201230_113324.jpg'
     },
     {
         year: '2024',
         title: 'Prepoznatljivost',
-        desc: 'Zlo dobija svoj identitet — novi dizajn, nova energija, ali ista filozofija. Počinjemo da stižemo na police, festivale hrane i u ruke ljudi koji cene kvalitet. Brend raste, ali ostaje ručni.',
+        desc: 'Zlo dobija svoj identitet. Prvi logo, prve teglice, prve nalepnice. Stižemo do prvih festivala hrane, polica i u ruke ljudi koji prepoznaju kvalitet. Brend raste ali ostaje ručno rađen.',
         image: '/3.jpeg'
     },
     {
         year: '2025',
         title: 'Evolucija',
-        desc: 'Unapredili smo proces, proširili tim i pokrenuli online prodaju. Trio Paket postaje hit — ljudi naručuju za sebe, za poklon, za inat. Ljutina se širi brže nego ikada.',
+        desc: 'Unapredili smo proces, zadržali dobro prepoznatljivi ukus. Ljudi naručuju za sebe, za poklon. Ljutina se širi brže nego ikad.',
         image: '/2.jpeg'
     },
     {
         year: '2026',
         title: 'Danas',
-        desc: 'Mala manufaktura sa velikom pričom. I dalje ručno, i dalje ljuto, ali sada sa stilom i zajednicom koja raste svakog dana. Tri sosa, hiljadu zadovoljnih nepaca — i tek smo počeli.',
+        desc: 'Mala manufaktura sa velikom pričom u novoj ambalaži. I dalje sve ručno i dalje ukusno ljuto ali sada sa širom zajednicom koja raste svakog dana. Tri sosa, hiljadu zadovoljnih nepaca. I tek smo počeli.',
         image: '/svi.png'
     }
 ];
@@ -80,10 +80,10 @@ function JourneyItem({ ev, i, isActive }: { ev: typeof EVENTS[0]; i: number; isA
                 >
                     {ev.year}
                 </span>
-                <h3 className={`text-2xl md:text-4xl font-bold text-white mb-2 md:mb-4 relative reveal-hidden ${isVisible ? (isEven ? 'reveal-right' : 'reveal-left') : ''}`}>
+                <h3 className={`text-xl md:text-3xl font-bold text-white mb-2 md:mb-4 relative reveal-hidden ${isVisible ? (isEven ? 'reveal-right' : 'reveal-left') : ''}`}>
                     {ev.title}
                 </h3>
-                <p className={`text-gray-400 font-light text-sm md:text-lg leading-relaxed relative reveal-hidden ${isVisible ? (isEven ? 'reveal-right stagger-2' : 'reveal-left stagger-2') : ''}`}>
+                <p className={`text-gray-400 font-light text-sm md:text-base lg:text-lg leading-relaxed relative reveal-hidden ${isVisible ? (isEven ? 'reveal-right stagger-2' : 'reveal-left stagger-2') : ''}`}>
                     {ev.desc}
                 </p>
             </div>
@@ -144,7 +144,7 @@ export default function Journey() {
             <div className="max-w-6xl mx-auto px-4 md:px-6 relative">
                 <h2
                     ref={titleRef}
-                    className={`text-3xl md:text-7xl font-black mb-12 md:mb-24 text-center reveal-hidden ${titleVisible ? 'reveal-up' : ''}`}
+                    className={`text-3xl md:text-5xl font-black mb-12 md:mb-24 text-center reveal-hidden ${titleVisible ? 'reveal-up' : ''}`}
                 >
                     NAŠ PUT
                 </h2>
@@ -152,7 +152,7 @@ export default function Journey() {
                 {/* Vertical Line (desktop only) */}
                 <div className="absolute left-6 md:left-1/2 top-40 bottom-20 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent -translate-x-1/2 z-0 hidden md:block" />
 
-                <div className="space-y-12 md:space-y-32">
+                <div className="space-y-10 md:space-y-32">
                     {EVENTS.map((ev, i) => (
                         <JourneyItem key={i} ev={ev} i={i} isActive={i === activeIndex} />
                     ))}

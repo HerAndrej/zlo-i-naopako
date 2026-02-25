@@ -5,24 +5,26 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const CONTACT_ITEMS = [
     {
-        href: 'mailto:info@zloinaopako.com',
+        href: 'mailto:zloinaopakososevi@gmail.com',
         icon: Mail,
         label: 'Email',
-        value: 'info@zloinaopako.com'
+        value: 'zloinaopakososevi@gmail.com'
     },
     {
-        href: 'tel:+381601234567',
+        href: 'tel:+381644389260',
         icon: Phone,
         label: 'Telefon',
-        value: '+381 60 123 4567'
+        value: '+381 64 438 9260'
     },
     {
-        href: '#',
+        href: 'https://www.instagram.com/zlo_i_naopako_sosevi/',
         icon: Instagram,
         label: 'Instagram',
-        value: '@zlo_i_naopako_sos'
+        value: '@zlo_i_naopako_sosevi',
+        target: '_blank'
     }
 ];
+
 
 function ContactItem({ item, index }: { item: typeof CONTACT_ITEMS[0]; index: number }) {
     const { ref, isVisible } = useScrollReveal<HTMLAnchorElement>({ threshold: 0.3 });
@@ -32,6 +34,8 @@ function ContactItem({ item, index }: { item: typeof CONTACT_ITEMS[0]; index: nu
         <a
             ref={ref}
             href={item.href}
+            target={item.target || '_self'}
+            rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
             className={`flex items-center gap-4 md:gap-6 group p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/5 
                 hover:border-primary/50 hover:bg-white/5 hover:shadow-[0_0_30px_rgba(220,38,38,0.1)] 
                 transition-all duration-500 hover:-translate-y-1
@@ -45,7 +49,7 @@ function ContactItem({ item, index }: { item: typeof CONTACT_ITEMS[0]; index: nu
             </div>
             <div>
                 <span className="block text-sm text-gray-500 uppercase tracking-wider mb-1">{item.label}</span>
-                <span className="text-base md:text-2xl font-bold break-all md:break-normal">{item.value}</span>
+                <span className="text-sm md:text-lg font-bold break-all md:break-normal">{item.value}</span>
             </div>
         </a>
     );
@@ -64,11 +68,11 @@ export default function Contact() {
                         <span className={`text-primary font-bold tracking-widest uppercase mb-4 block reveal-hidden ${headingVisible ? 'reveal-left' : ''}`}>
                             Kontakt
                         </span>
-                        <h2 className={`text-3xl md:text-7xl font-black mb-5 md:mb-8 leading-tight reveal-hidden ${headingVisible ? 'reveal-left stagger-1' : ''}`}>
+                        <h2 className={`text-3xl md:text-5xl font-black mb-5 md:mb-8 leading-tight reveal-hidden ${headingVisible ? 'reveal-left stagger-1' : ''}`}>
                             JAVI SE <br />
                             <span className="text-gray-600">AKO SMEŠ.</span>
                         </h2>
-                        <p className={`text-gray-400 text-base md:text-xl font-light max-w-md reveal-hidden ${headingVisible ? 'reveal-left stagger-2' : ''}`}>
+                        <p className={`text-gray-400 text-sm md:text-base font-light max-w-md reveal-hidden ${headingVisible ? 'reveal-left stagger-2' : ''}`}>
                             Imaš pitanje? Hoćeš saradnju? Ili samo želiš da nam kažeš da smo preterali sa ljutinom? Tu smo.
                         </p>
                     </div>

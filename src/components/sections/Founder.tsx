@@ -4,7 +4,7 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { ChefHat, Flame, Heart } from 'lucide-react';
 
 const STATS = [
-    { icon: ChefHat, value: '10+', label: 'Godina iskustva' },
+    { icon: ChefHat, value: '6+', label: 'Godina iskustva' },
     { icon: Flame, value: '3', label: 'Originalna sosa' },
     { icon: Heart, value: '∞', label: 'Ljubav prema ljutom' },
 ];
@@ -47,23 +47,23 @@ export default function Founder() {
                         <span className={`text-primary font-bold tracking-[0.15em] uppercase mb-3 block text-xs md:text-sm reveal-hidden ${isVisible ? 'reveal-right stagger-1' : ''}`}>
                             O meni
                         </span>
-                        <h2 className={`text-3xl md:text-6xl font-black mb-6 md:mb-8 leading-[0.95] reveal-hidden ${isVisible ? 'reveal-right stagger-2' : ''}`}>
+                        <h2 className={`text-3xl md:text-5xl font-black mb-6 md:mb-8 leading-[0.95] reveal-hidden ${isVisible ? 'reveal-right stagger-2' : ''}`}>
                             IZA SVAKOG <br />
                             <span className="text-primary">SOSA</span> STOJI <br />
                             PRIČA.
                         </h2>
 
                         <div className={`space-y-4 md:space-y-6 mb-8 md:mb-10 reveal-hidden ${isVisible ? 'reveal-right stagger-3' : ''}`}>
-                            <p className="text-gray-300 text-base md:text-xl font-light leading-relaxed">
-                                Ja sam <span className="text-white font-medium">Aleksandar Davidović</span> — kuvar sa preko 10 godina iskustva u profesionalnim kuhinjama.
+                            <p className="text-gray-300 text-sm md:text-base lg:text-lg font-light leading-relaxed">
+                                Ja sam <span className="text-white font-medium">Aleksandar Davidović</span> — kuvar sa preko 6 godina iskustva u profesionalnim kuhinjama.
                                 Oduvek sam voleo ljute paprike i intenzivne ukuse koji bude čula.
                             </p>
-                            <p className="text-gray-400 text-sm md:text-lg font-light leading-relaxed">
+                            <p className="text-gray-400 text-sm md:text-base lg:text-lg font-light leading-relaxed">
                                 Zlo i Naopako nije nastalo u fabrici, već u mojoj kuhinji — iz čiste ljubavi prema ljutini,
                                 eksperimentisanju i želji da napravim nešto što ljudi zaista <span className="text-white">žele da jedu</span>.
                                 Svaki sos ima svoj karakter, baš kao i jelo koje pravim — bez kompromisa, bez prečica, samo pravi ukus.
                             </p>
-                            <p className="text-gray-400 text-sm md:text-lg font-light leading-relaxed">
+                            <p className="text-gray-400 text-sm md:text-base lg:text-lg font-light leading-relaxed">
                                 Verujem da hrana treba da budi emocije. A ljutina? Ljutina budi <span className="text-primary font-medium">sve</span>.
                             </p>
                         </div>

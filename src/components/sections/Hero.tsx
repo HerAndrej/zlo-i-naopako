@@ -16,7 +16,7 @@ export default function Hero() {
 
             <div className="max-w-4xl relative md:w-1/2 z-20 text-center md:text-left">
                 {/* Title */}
-                <h1 className="text-5xl md:text-[9rem] font-black leading-[0.85] tracking-tighter mb-6 md:mb-8 uppercase">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-[0.85] tracking-tighter mb-6 md:mb-8 uppercase">
                     <span className={`block reveal-hidden ${isVisible ? 'reveal-up' : ''}`}>
                         Zlo i
                     </span>
@@ -27,9 +27,9 @@ export default function Hero() {
                 </h1>
 
                 {/* Subtitle */}
-                <p className={`text-lg md:text-2xl text-gray-400 mb-8 md:mb-12 max-w-xl mx-auto md:mx-0 font-light leading-relaxed reveal-hidden ${isVisible ? 'reveal-up stagger-3' : ''}`}>
+                <p className={`text-base md:text-xl text-gray-400 mb-8 md:mb-12 max-w-xl mx-auto md:mx-0 font-light leading-relaxed reveal-hidden ${isVisible ? 'reveal-up stagger-3' : ''}`}>
                     Mala kuhinja. <span className="text-white font-medium">Veliki haos.</span><br />
-                    Ručno rađeni ljuti sosevi koji ne praštaju.
+                    Ukusno ljuti.
                 </p>
 
                 {/* CTA Button */}

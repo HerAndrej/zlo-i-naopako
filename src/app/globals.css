@@ -53,6 +53,16 @@
     color: var(--foreground);
     font-family: var(--font-outfit), sans-serif;
     overflow-x: hidden;
+    cursor: url('/cursor-pepper.svg') 8 4, auto;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input[type="submit"],
+  label[for],
+  select {
+    cursor: url('/cursor-pepper.svg') 8 4, pointer;
   }
 
   html {

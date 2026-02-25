@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Stem -->
+  <path d="M16 3 Q18 1 20 2 Q19 4 17 5" fill="#4a7c3f" stroke="#2d5a27" stroke-width="0.5"/>
+  <!-- Pepper body -->
+  <path d="M15 5 Q11 6 10 10 Q8 16 9 22 Q10 28 16 30 Q22 28 23 22 Q24 16 22 10 Q21 6 17 5 Z" 
+        fill="#DC2626" stroke="#b91c1c" stroke-width="0.8"/>
+  <!-- Shine -->
+  <ellipse cx="13" cy="13" rx="2" ry="4" fill="rgba(255,255,255,0.25)" transform="rotate(-15 13 13)"/>
+</svg>

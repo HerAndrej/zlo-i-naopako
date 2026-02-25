@@ -43,9 +43,9 @@ export default function Home() {
         >
           <a href="#" className="flex items-center transition-transform hover:scale-105 duration-300">
             <img
-              src="/logo.webp"
+              src="/logo-zin.png"
               alt="Zlo i Naopako"
-              className={`w-auto object-contain transition-all duration-500 ${scrollY > 80 ? 'h-8 md:h-10' : 'h-10 md:h-12'}`}
+              className={`w-auto object-contain transition-all duration-500 ${scrollY > 80 ? 'h-12 md:h-14' : 'h-14 md:h-16'}`}
             />
           </a>
 
@@ -124,12 +124,29 @@ export default function Home() {
           <Testimonials />
           <Contact />
 
-          <footer className="py-8 text-center text-gray-500 text-sm bg-black relative z-10 flex flex-col gap-2 items-center justify-center">
-            <p>© 2024 Zlo i naopako ljuti sosevi – vrući još od 2021.</p>
-            <Link href="/admin" className="opacity-10 hover:opacity-50 transition-opacity">
-              <Lock size={12} />
-            </Link>
+          <footer className="py-12 bg-black border-t border-white/5 relative z-10">
+            <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-6">
+              {/* Logo */}
+              <img
+                src="/logo-zin.png"
+                alt="Zlo i Naopako"
+                className="h-16 md:h-20 w-auto object-contain opacity-80"
+              />
+              {/* Copyright */}
+              <p className="text-gray-600 text-sm text-center">
+                © 2025 Zlo i Naopako • Ljuti sosevi ručne izrade
+              </p>
+              {/* Admin link — diskretan */}
+              <Link
+                href="/admin"
+                className="flex items-center gap-1.5 text-gray-700 hover:text-gray-400 transition-all duration-300 text-xs group mt-2"
+              >
+                <Lock size={11} className="group-hover:text-primary transition-colors duration-300" />
+                <span>admin</span>
+              </Link>
+            </div>
           </footer>
+
         </div>
       </main>
     </CartProvider>

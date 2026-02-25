@@ -13,7 +13,7 @@ const SECTIONS = [
     {
         id: 'process',
         title: 'Vreme je naš tajni sastojak.',
-        text: 'Dobre stvari ne mogu na brzinu. Naši sosevi fermentišu nedeljama u buradima dok ne razviju onaj duboki, kompleksni profil koji te tera da probaš još. Strpljenje se oseća u svakoj kapi.',
+        text: 'Dobre stvari ne mogu na brzinu. Naš sos Bafalo fermentiše nedeljama dok ne razvije onaj duboki, kompleksni profil koji te tera da probaš još. Strpljenje se oseća u svakoj kapi.',
         image: '/bg-barrels.png',
         highlight: 'Fermentacija'
     },
@@ -99,7 +99,7 @@ export default function Story() {
                                 {section.highlight}
                             </span>
                             <h2
-                                className="text-3xl md:text-8xl font-black mb-5 md:mb-8 leading-[0.95] md:leading-[0.9] text-white"
+                                className="text-3xl md:text-5xl lg:text-6xl font-black mb-5 md:mb-8 leading-[0.95] md:leading-[0.9] text-white"
                                 style={{
                                     opacity: idx === activeIndex ? 1 : 0,
                                     transform: idx === activeIndex ? 'translateY(0)' : 'translateY(40px)',
@@ -109,7 +109,7 @@ export default function Story() {
                                 {section.title}
                             </h2>
                             <p
-                                className="text-base md:text-2xl text-gray-300 font-light leading-relaxed"
+                                className="text-sm md:text-base lg:text-lg text-gray-300 font-light leading-relaxed"
                                 style={{
                                     opacity: idx === activeIndex ? 1 : 0,
                                     transform: idx === activeIndex ? 'translateY(0)' : 'translateY(30px)',

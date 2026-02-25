@@ -105,7 +105,7 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
 
             {/* Section Title */}
             <div className={`mb-6 md:mb-12 text-center reveal-hidden ${isVisible ? 'reveal-up' : ''}`}>
-                <h2 className="text-4xl md:text-7xl font-black mb-2 tracking-tighter">
+                <h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tighter">
                     IZABERI SVOJE <br />
                     <span className="transition-colors duration-500" style={{ color: sauce.color }}>ZLO.</span>
                 </h2>
@@ -168,7 +168,7 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
                             style={{ backgroundColor: sauce.color }}
                         />
 
-                        <p className={`text-base md:text-xl text-gray-300 mb-6 md:mb-10 leading-relaxed font-light reveal-hidden ${isVisible ? 'reveal-left stagger-4' : ''}`}>
+                        <p className={`text-sm md:text-base text-gray-300 mb-6 md:mb-10 leading-relaxed font-light reveal-hidden ${isVisible ? 'reveal-left stagger-4' : ''}`}>
                             {sauce.description}
                         </p>
 

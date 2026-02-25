@@ -34,11 +34,11 @@ export default function SpecialOffer() {
                         Specijalna Ponuda
                     </span>
 
-                    <h2 className={`text-6xl md:text-8xl font-black text-white mb-6 uppercase leading-[0.9] reveal-hidden ${isVisible ? 'reveal-up stagger-1' : ''}`}>
+                    <h2 className={`text-4xl md:text-5xl lg:text-7xl font-black text-white mb-6 uppercase leading-[0.9] reveal-hidden ${isVisible ? 'reveal-up stagger-1' : ''}`}>
                         Trio <br /><span className="text-primary">Paket.</span>
                     </h2>
 
-                    <p className={`text-gray-400 text-xl md:text-2xl mb-10 font-light max-w-xl mx-auto lg:mx-0 reveal-hidden ${isVisible ? 'reveal-up stagger-2' : ''}`}>
+                    <p className={`text-gray-400 text-base md:text-lg mb-10 font-light max-w-xl mx-auto lg:mx-0 reveal-hidden ${isVisible ? 'reveal-up stagger-2' : ''}`}>
                         Zašto birati kad možeš da imaš sve? Sva tri jahača apokalipse u jednoj kutiji. Savršen poklon za nekoga koga voliš (ili mrziš).
                     </p>
 
@@ -66,7 +66,7 @@ export default function SpecialOffer() {
 
                         <button
                             onClick={handleOrder}
-                            className="group bg-primary hover:bg-red-700 text-white text-xl font-black py-5 px-10 rounded-full transition-all hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] hover:scale-105 flex items-center gap-3"
+                            className="group bg-primary hover:bg-red-700 text-white text-base md:text-lg font-black py-3.5 md:py-4 px-8 md:px-10 rounded-full transition-all hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] hover:scale-105 flex items-center gap-3"
                         >
                             Naruči Sve
                             <ArrowRight className="group-hover:translate-x-1 transition-transform" />

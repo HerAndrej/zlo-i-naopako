@@ -19,6 +19,7 @@ export default function CheckoutModal() {
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         name: '',
+        email: '',
         address: '',
         city: '',
         phone: '',
@@ -48,6 +49,7 @@ export default function CheckoutModal() {
                 .insert({
                     id: orderId,
                     customer_name: formData.name,
+                    customer_email: formData.email,
                     customer_phone: formData.phone,
                     customer_city: formData.city,
                     customer_address: formData.address,
@@ -73,7 +75,16 @@ export default function CheckoutModal() {
 
             if (itemsError) throw itemsError;
 
-            // 3. Uspeh
+            // 3. Pošalji email notifikacije (fire-and-forget)
+            if (formData.email) {
+                fetch('/api/orders/send-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId }),
+                }).catch(err => console.error('Email send failed:', err));
+            }
+
+            // 4. Uspeh
             setStep(3);
             clearCart();
         } catch (err: unknown) {
@@ -293,6 +304,18 @@ export default function CheckoutModal() {
                                         placeholder="npr. Petar Petrović"
                                         value={formData.name}
                                         onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 ml-2">Email adresa</label>
+                                    <input
+                                        type="email"
+                                        required
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-700"
+                                        placeholder="npr. petar@email.com"
+                                        value={formData.email}
+                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
                                     />
                                 </div>
 
