@@ -22,7 +22,7 @@ const SAUCES = {
     congo: {
         id: 'congo',
         name: 'Čongo',
-        subtitle: 'Voćni haos',
+        subtitle: 'Voćniji, življi i ljući',
         description: 'Čongo je divlji brat iz ekipe – voćniji, življi i ljutiji. Citrusne note i ozbiljan šut kapsaicina za dane kad ti treba malo više buke u tanjiru.',
         color: '#EAB308',
         colorRgb: '234, 179, 8',
@@ -106,8 +106,8 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
             {/* Section Title */}
             <div className={`mb-6 md:mb-12 text-center reveal-hidden ${isVisible ? 'reveal-up' : ''}`}>
                 <h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tighter">
-                    IZABERI SVOJE <br />
-                    <span className="transition-colors duration-500" style={{ color: sauce.color }}>ZLO.</span>
+                    IZABERI SVOJ <br />
+                    <span className="transition-colors duration-500" style={{ color: sauce.color }}>SOS.</span>
                 </h2>
             </div>
 

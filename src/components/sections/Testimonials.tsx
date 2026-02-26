@@ -104,7 +104,7 @@ export default function Testimonials() {
                         Zid Plača (od sreće)
                     </span>
                     <h2 className={`text-3xl md:text-5xl font-black text-white mb-4 reveal-hidden ${headerVisible ? 'reveal-up stagger-1' : ''}`}>
-                        REČI PREŽIVELIH
+                        REČI ZADOVOLJNIH KUPACA
                     </h2>
                     {/* Stats badges */}
                     <div className={`flex items-center justify-center gap-4 flex-wrap mt-4 reveal-hidden ${headerVisible ? 'reveal-up stagger-2' : ''}`}>
