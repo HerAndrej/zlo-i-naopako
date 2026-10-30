@@ -1,8 +1,9 @@
 
 "use client";
 
-import { useState } from 'react';
-import { LucideFlame } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { LucideFlame, X } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { useCart } from '@/context/CartContext';
 
@@ -65,7 +66,18 @@ interface SaucesProps {
 export default function Sauces({ onSauceChange }: SaucesProps) {
     const [activeSauce, setActiveSauce] = useState<keyof typeof SAUCES>('smokisa');
     const [isAnimating, setIsAnimating] = useState(false);
+    const [isZoomed, setIsZoomed] = useState(false);
     const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.1 });
+
+    // Esc zatvara uvećanu sliku
+    useEffect(() => {
+        if (!isZoomed) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setIsZoomed(false);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [isZoomed]);
     const { addToCart, isInStock } = useCart();
 
     const handleSelect = (key: keyof typeof SAUCES) => {
@@ -138,18 +150,25 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 w-full max-w-7xl mx-auto items-center">
                 {/* Visual Side (Image) */}
                 <div className="order-1 md:order-2 flex justify-center h-[34vh] md:h-[60vh] relative">
-                    <img
-                        src={sauce.image}
-                        alt={sauce.name}
-                        className={`
-                            h-full w-auto max-w-full object-contain drop-shadow-2xl transition-all duration-500 transform
-                            ${isAnimating ? 'opacity-0 scale-75 rotate-6' : 'opacity-100 scale-100 rotate-0'}
-                        `}
-                        style={{
-                            filter: isAnimating ? 'blur(8px)' : 'blur(0px)',
-                            transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                        }}
-                    />
+                    <button
+                        type="button"
+                        onClick={() => setIsZoomed(true)}
+                        aria-label={`Uvećaj sliku: ${sauce.name}`}
+                        className="h-full max-w-full flex justify-center cursor-zoom-in"
+                    >
+                        <img
+                            src={sauce.image}
+                            alt={sauce.name}
+                            className={`
+                                h-full w-auto max-w-full object-contain drop-shadow-2xl transition-all duration-500 transform
+                                ${isAnimating ? 'opacity-0 scale-75 rotate-6' : 'opacity-100 scale-100 rotate-0'}
+                            `}
+                            style={{
+                                filter: isAnimating ? 'blur(8px)' : 'blur(0px)',
+                                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                            }}
+                        />
+                    </button>
                 </div>
 
                 {/* Info Side */}
@@ -234,6 +253,32 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
                     </div>
                 </div>
             </div>
+
+            {/* Uvećana slika (portal u body da bude iznad menija) */}
+            {isZoomed && createPortal(
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={sauce.name}
+                    onClick={() => setIsZoomed(false)}
+                    className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out animate-fade-in"
+                >
+                    <img
+                        src={sauce.image}
+                        alt={sauce.name}
+                        className="max-h-[90vh] max-w-full object-contain drop-shadow-2xl"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setIsZoomed(false)}
+                        aria-label="Zatvori"
+                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors"
+                    >
+                        <X size={28} />
+                    </button>
+                </div>,
+                document.body
+            )}
         </section>
     );
 }
