@@ -14,7 +14,7 @@ const SAUCES = {
         description: 'Smokiša je mekano dimljeni ljuti sos za sve koji vole roštilj vibru čak i kad nema roštilja. Blaga kiselina, puno paprike i topla ljutina koja greje, a ne ubija.',
         color: '#F59E0B',
         colorRgb: '245, 158, 11',
-        image: '/smokisa_final.png',
+        image: '/sosevi/smokisa.webp',
         heat: 3,
         bestWith: 'burger, krompiriće, sendviče, jaja, roštilj.',
         price: 650
@@ -26,7 +26,7 @@ const SAUCES = {
         description: 'Čongo je divlji brat iz ekipe – voćniji, življi i ljutiji. Citrusne note i ozbiljan šut kapsaicina za dane kad ti treba malo više buke u tanjiru.',
         color: '#EAB308',
         colorRgb: '234, 179, 8',
-        image: '/congo.png',
+        image: '/sosevi/congo.webp',
         heat: 4,
         bestWith: 'tacos, piletinu, pizzu, testeninu, grilovano povrće.',
         price: 700
@@ -38,7 +38,7 @@ const SAUCES = {
         description: 'Bafalo je naš domaći buffalo‑style sos: kremast, pikantan i pravljen da se lepi za krilca i prste. Puterasti ukus, sirće i čili spojeni u savršen haos za sve prženo.',
         color: '#EA580C',
         colorRgb: '234, 88, 12',
-        image: '/bafalo_final.png',
+        image: '/sosevi/bafalo.webp',
         heat: 3,
         bestWith: 'pileća krilca, burger, onion rings, pržene krompiriće, sendviče.',
         price: 750
@@ -50,7 +50,7 @@ const SAUCES = {
         description: 'Zašto birati kad možeš da imaš sve? Sva tri jahača apokalipse u jednoj kutiji — Smokiša, Čongo i Bafalo. Savršen poklon za nekoga koga voliš (ili mrziš).',
         color: '#DC2626',
         colorRgb: '220, 38, 38',
-        image: '/svi.png',
+        image: '/sosevi/trio.webp',
         heat: 5,
         bestWith: 'bukvalno sve. Od doručka do večere, od roštilja do pizze.',
         price: 1890,
@@ -137,12 +137,12 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 w-full max-w-7xl mx-auto items-center">
                 {/* Visual Side (Image) */}
-                <div className="order-1 md:order-2 flex justify-center h-[30vh] md:h-[50vh] relative">
+                <div className="order-1 md:order-2 flex justify-center h-[34vh] md:h-[60vh] relative">
                     <img
                         src={sauce.image}
                         alt={sauce.name}
                         className={`
-                            h-full w-auto object-contain drop-shadow-2xl transition-all duration-500 transform
+                            h-full w-auto max-w-full object-contain drop-shadow-2xl transition-all duration-500 transform
                             ${isAnimating ? 'opacity-0 scale-75 rotate-6' : 'opacity-100 scale-100 rotate-0'}
                         `}
                         style={{
