@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { fetchOutOfStock } from '@/lib/stock';
+import { pratiDogadjaj } from '@/lib/meta';
 
 export interface CartItem {
     id: string;
@@ -51,6 +52,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const addToCart = useCallback((product: Omit<CartItem, 'quantity'>) => {
         if (outOfStock.includes(product.id)) return;
+        pratiDogadjaj('AddToCart', {
+            content_ids: [product.id],
+            content_name: product.name,
+            content_type: 'product',
+            value: product.price,
+            currency: 'RSD',
+        });
         setItems(prev => {
             const existing = prev.find(item => item.id === product.id);
             if (existing) {

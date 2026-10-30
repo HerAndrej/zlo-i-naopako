@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
 import { PRODUCTS } from '@/lib/products';
+import { pratiDogadjaj } from '@/lib/meta';
 
 export default function CheckoutModal() {
     const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, totalPrice, addToCart, isInStock, refreshStock } = useCart();
@@ -90,7 +91,17 @@ export default function CheckoutModal() {
                 }).catch(err => console.error('Email send failed:', err));
             }
 
-            // 4. Uspeh
+            // 4. Meta Purchase (eventID = id narudžbine, za kasnije uparivanje sa serverom)
+            pratiDogadjaj('Purchase', {
+                content_ids: items.map(item => item.id),
+                contents: items.map(item => ({ id: item.id, quantity: item.quantity })),
+                content_type: 'product',
+                num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+                value: totalPrice,
+                currency: 'RSD',
+            }, orderId);
+
+            // 5. Uspeh
             setStep(3);
             clearCart();
         } catch (err: unknown) {
@@ -274,7 +285,15 @@ export default function CheckoutModal() {
                                                 </p>
                                             )}
                                             <button
-                                                onClick={() => setStep(2)}
+                                                onClick={() => {
+                                                    pratiDogadjaj('InitiateCheckout', {
+                                                        content_ids: items.map(item => item.id),
+                                                        num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+                                                        value: totalPrice,
+                                                        currency: 'RSD',
+                                                    });
+                                                    setStep(2);
+                                                }}
                                                 disabled={unavailableItems.length > 0}
                                                 className="w-full bg-primary hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary"
                                             >

@@ -14,6 +14,8 @@ import Testimonials from "@/components/sections/Testimonials";
 import Link from "next/link";
 import { Lock } from 'lucide-react';
 import CheckoutModal from "@/components/ui/CheckoutModal";
+import Pristanak from "@/components/ui/Pristanak";
+import { sacuvajPristanak } from "@/lib/pristanak";
 
 export default function Home() {
   const [activeColor, setActiveColor] = useState('#F59E0B');
@@ -32,6 +34,7 @@ export default function Home() {
       <main className="relative w-full min-h-screen" suppressHydrationWarning>
 
         <CheckoutModal />
+        <Pristanak />
 
         {/* Navbar */}
         <nav
@@ -136,6 +139,14 @@ export default function Home() {
               <p className="text-gray-600 text-sm text-center">
                 © 2025 Zlo i Naopako • Ljuti sosevi ručne izrade
               </p>
+              {/* Ponovo pita za kolačić oglasa */}
+              <button
+                type="button"
+                onClick={() => sacuvajPristanak(null)}
+                className="text-gray-600 hover:text-gray-400 transition-colors text-xs underline underline-offset-4"
+              >
+                Kolačići
+              </button>
               {/* Admin link — diskretan */}
               <Link
                 href="/admin"
