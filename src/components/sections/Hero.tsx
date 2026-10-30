@@ -43,11 +43,15 @@ export default function Hero() {
 
             {/* Hero Image */}
             <div className={`md:w-1/2 flex justify-center md:justify-end mt-8 md:mt-0 relative z-10 reveal-hidden ${isVisible ? 'reveal-right stagger-3' : ''}`}>
-                <img
-                    src="/svi.png"
-                    alt="Svi sosevi"
-                    className={`w-[70%] md:w-[120%] max-w-none md:-mr-20 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700 ${isVisible ? 'animate-float' : ''}`}
-                />
+                {/* Na telefonu opsečena slika (bez praznog prostora oko flaša) da flaše budu veće */}
+                <picture className="contents">
+                    <source media="(max-width: 767px)" srcSet="/sosevi/trio.webp" />
+                    <img
+                        src="/svi.png"
+                        alt="Svi sosevi"
+                        className={`w-[90%] md:w-[120%] max-w-none md:-mr-20 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700 ${isVisible ? 'animate-float' : ''}`}
+                    />
+                </picture>
             </div>
         </section>
     );
