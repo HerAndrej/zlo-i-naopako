@@ -148,3 +148,45 @@ ORDER BY o.created_at DESC;
 -- INSERT INTO admin_users (id, email)
 -- SELECT id, email FROM auth.users WHERE email = 'tvoj@email.com';
 -- ============================================================
+
+-- 9. TABELA: product_stock (da li je proizvod na stanju)
+-- ============================================================
+-- Proizvod bez reda u tabeli smatra se dostupnim.
+CREATE TABLE IF NOT EXISTS product_stock (
+  product_id TEXT PRIMARY KEY,
+  in_stock BOOLEAN NOT NULL DEFAULT TRUE,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+INSERT INTO product_stock (product_id) VALUES
+  ('smokisa'), ('congo'), ('bafalo'), ('trio')
+ON CONFLICT (product_id) DO NOTHING;
+
+DROP TRIGGER IF EXISTS product_stock_updated_at ON product_stock;
+CREATE TRIGGER product_stock_updated_at
+  BEFORE UPDATE ON product_stock
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE product_stock ENABLE ROW LEVEL SECURITY;
+
+-- Sajt svima prikazuje stanje
+DROP POLICY IF EXISTS "Anyone can read product stock" ON product_stock;
+CREATE POLICY "Anyone can read product stock"
+  ON product_stock FOR SELECT
+  USING (true);
+
+-- Samo admini menjaju stanje
+DROP POLICY IF EXISTS "Admins can insert product stock" ON product_stock;
+CREATE POLICY "Admins can insert product stock"
+  ON product_stock FOR INSERT
+  WITH CHECK (is_admin());
+
+DROP POLICY IF EXISTS "Admins can update product stock" ON product_stock;
+CREATE POLICY "Admins can update product stock"
+  ON product_stock FOR UPDATE
+  USING (is_admin())
+  WITH CHECK (is_admin());
+
+GRANT SELECT ON product_stock TO anon, authenticated;
+GRANT INSERT, UPDATE ON product_stock TO authenticated;

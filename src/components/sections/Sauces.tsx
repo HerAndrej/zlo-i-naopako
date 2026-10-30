@@ -66,7 +66,7 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
     const [activeSauce, setActiveSauce] = useState<keyof typeof SAUCES>('smokisa');
     const [isAnimating, setIsAnimating] = useState(false);
     const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.1 });
-    const { addToCart } = useCart();
+    const { addToCart, isInStock } = useCart();
 
     const handleSelect = (key: keyof typeof SAUCES) => {
         if (key === activeSauce) return;
@@ -90,6 +90,7 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
 
     const sauce = SAUCES[activeSauce];
     const isTrio = activeSauce === 'trio';
+    const inStock = isInStock(sauce.id);
 
     return (
         <section
@@ -196,6 +197,9 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
                                     <span className="block text-gray-500 line-through text-base">{(sauce as any).oldPrice.toLocaleString('sr-RS')} RSD</span>
                                 )}
                                 <span className="text-2xl md:text-3xl font-bold">{sauce.price.toLocaleString('sr-RS')} <span className="text-sm font-normal text-gray-500">RSD</span></span>
+                                {!inStock && (
+                                    <span className="block text-xs font-bold text-red-400 uppercase tracking-widest mt-2">Trenutno nema na stanju</span>
+                                )}
                             </div>
                             <div className="col-span-2">
                                 <span className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Najbolje uz</span>
@@ -205,20 +209,27 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
 
                         <button
                             onClick={handleAddToCart}
-                            className={`group w-full text-white font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all hover:scale-105 flex items-center justify-center gap-2 reveal-hidden ${isVisible ? 'reveal-scale stagger-6' : ''}`}
-                            style={{
+                            disabled={!inStock}
+                            className={`group w-full font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all flex items-center justify-center gap-2 reveal-hidden ${inStock ? 'text-white hover:scale-105' : 'text-gray-400 bg-white/5 border border-white/10 cursor-not-allowed'} ${isVisible ? 'reveal-scale stagger-6' : ''}`}
+                            style={inStock ? {
                                 backgroundColor: sauce.color,
                                 boxShadow: `0 0 30px ${sauce.color}44`
-                            }}
+                            } : {}}
                             onMouseEnter={(e) => {
-                                e.currentTarget.style.boxShadow = `0 0 40px ${sauce.color}88`;
+                                if (inStock) e.currentTarget.style.boxShadow = `0 0 40px ${sauce.color}88`;
                             }}
                             onMouseLeave={(e) => {
-                                e.currentTarget.style.boxShadow = `0 0 30px ${sauce.color}44`;
+                                if (inStock) e.currentTarget.style.boxShadow = `0 0 30px ${sauce.color}44`;
                             }}
                         >
-                            {isTrio ? 'Naruči Sve' : 'Dodaj u korpu'}
-                            <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+                            {inStock ? (
+                                <>
+                                    {isTrio ? 'Naruči Sve' : 'Dodaj u korpu'}
+                                    <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+                                </>
+                            ) : (
+                                'Trenutno nema na stanju'
+                            )}
                         </button>
                     </div>
                 </div>

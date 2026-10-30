@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { PRODUCTS } from '@/lib/products';
 import {
     LucideFlame,
     LogOut,
@@ -60,6 +61,25 @@ export default function AdminDashboard() {
     const [searchQuery, setSearchQuery] = useState('');
     const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
     const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+    // product_id -> na stanju; proizvod bez reda u bazi je na stanju
+    const [stock, setStock] = useState<Record<string, boolean>>({});
+    const [updatingStock, setUpdatingStock] = useState<string | null>(null);
+    const [stockError, setStockError] = useState('');
+
+    const fetchStock = useCallback(async () => {
+        const { data, error } = await supabase
+            .from('product_stock')
+            .select('product_id, in_stock');
+
+        if (error) {
+            console.error('Failed to fetch stock:', error);
+            setStockError('Stanje proizvoda nije moglo da se učita.');
+            return;
+        }
+
+        setStockError('');
+        setStock(Object.fromEntries((data || []).map(row => [row.product_id, row.in_stock])));
+    }, []);
 
     const fetchOrders = useCallback(async (showRefresh = false) => {
         if (showRefresh) setRefreshing(true);
@@ -105,7 +125,28 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         fetchOrders();
-    }, [fetchOrders]);
+        fetchStock();
+    }, [fetchOrders, fetchStock]);
+
+    const handleStockToggle = async (productId: string) => {
+        const newValue = !(stock[productId] ?? true);
+        setUpdatingStock(productId);
+        setStockError('');
+        try {
+            const { error } = await supabase
+                .from('product_stock')
+                .upsert({ product_id: productId, in_stock: newValue }, { onConflict: 'product_id' });
+
+            if (error) throw error;
+
+            setStock(prev => ({ ...prev, [productId]: newValue }));
+        } catch (err) {
+            console.error('Failed to update stock:', err);
+            setStockError('Promena nije sačuvana. Pokušaj ponovo.');
+        } finally {
+            setUpdatingStock(null);
+        }
+    };
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -247,6 +288,51 @@ export default function AdminDashboard() {
                     </div>
                 </div>
 
+                {/* Stanje proizvoda */}
+                <div className="mb-8">
+                    <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Stanje proizvoda</h2>
+                    {stockError && (
+                        <p className="mb-3 text-sm text-red-400">{stockError}</p>
+                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        {PRODUCTS.map(product => {
+                            const inStock = stock[product.id] ?? true;
+                            const isUpdating = updatingStock === product.id;
+
+                            return (
+                                <div
+                                    key={product.id}
+                                    className="bg-white/[0.03] border border-white/10 rounded-2xl p-3 flex items-center gap-3"
+                                >
+                                    <div className="w-12 h-12 shrink-0 rounded-lg bg-black/50 flex items-center justify-center p-1">
+                                        <img src={product.image} alt={product.name} className={`h-full w-auto object-contain ${inStock ? '' : 'opacity-40 grayscale'}`} />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-bold text-sm truncate">{product.name}</p>
+                                        <p className={`text-xs ${inStock ? 'text-green-400' : 'text-red-400'}`}>
+                                            {inStock ? 'Na stanju' : 'Nema na stanju'}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => handleStockToggle(product.id)}
+                                        disabled={isUpdating}
+                                        role="switch"
+                                        aria-checked={inStock}
+                                        aria-label={`${product.name}: ${inStock ? 'na stanju' : 'nema na stanju'}`}
+                                        className={`relative w-11 h-6 shrink-0 rounded-full transition-colors disabled:opacity-50 ${inStock ? 'bg-green-500' : 'bg-white/10'}`}
+                                    >
+                                        {isUpdating ? (
+                                            <Loader2 size={14} className="absolute inset-0 m-auto animate-spin text-white" />
+                                        ) : (
+                                            <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${inStock ? 'translate-x-5' : ''}`} />
+                                        )}
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
                 {/* Filters Bar */}
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
                     {/* Search */}
@@ -292,7 +378,7 @@ export default function AdminDashboard() {
 
                     {/* Refresh */}
                     <button
-                        onClick={() => fetchOrders(true)}
+                        onClick={() => { fetchOrders(true); fetchStock(); }}
                         disabled={refreshing}
                         className="p-3 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:border-white/20 transition-all shrink-0"
                     >

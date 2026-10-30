@@ -4,16 +4,10 @@ import { X, Check, Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Loader2 } from 
 import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
-
-const PRODUCTS = [
-    { id: 'smokisa', name: 'Smokiša', price: 650, image: '/smokisa_final.png' },
-    { id: 'congo', name: 'Čongo', price: 700, image: '/congo.png' },
-    { id: 'bafalo', name: 'Bafalo', price: 750, image: '/bafalo_final.png' },
-    { id: 'trio', name: 'Trio Paket', price: 1890, image: '/svi.png' },
-];
+import { PRODUCTS } from '@/lib/products';
 
 export default function CheckoutModal() {
-    const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, totalPrice, addToCart } = useCart();
+    const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, totalPrice, addToCart, isInStock, refreshStock } = useCart();
     const [step, setStep] = useState(1); // 1 = Cart, 2 = Form, 3 = Success
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -30,10 +24,14 @@ export default function CheckoutModal() {
         if (isOpen) {
             setStep(1);
             setError('');
+            refreshStock();
         }
-    }, [isOpen]);
+    }, [isOpen, refreshStock]);
 
     if (!isOpen) return null;
+
+    const unavailableItems = items.filter(item => !isInStock(item.id));
+    const quickAddProducts = PRODUCTS.filter(p => !items.some(i => i.id === p.id) && isInStock(p.id));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -41,6 +39,14 @@ export default function CheckoutModal() {
         setError('');
 
         try {
+            // 0. Proveri stanje neposredno pre slanja (admin je možda u međuvremenu isključio proizvod)
+            const outOfStock = await refreshStock();
+            const unavailable = items.filter(item => outOfStock.includes(item.id));
+            if (unavailable.length > 0) {
+                setError(`${unavailable.map(i => i.name).join(', ')}: trenutno nema na stanju. Vrati se na korpu i ukloni ${unavailable.length === 1 ? 'ga' : 'ih'}.`);
+                return;
+            }
+
             // 1. Generiši UUID za narudžbinu (da izbegnemo RLS select problem)
             const orderId = crypto.randomUUID();
 
@@ -182,7 +188,11 @@ export default function CheckoutModal() {
                                                 {/* Product Info */}
                                                 <div className="flex-1 min-w-0">
                                                     <h4 className="font-bold text-white text-sm md:text-base truncate">{item.name}</h4>
-                                                    <p className="text-gray-500 text-xs md:text-sm">{formatPrice(item.price)} RSD</p>
+                                                    {isInStock(item.id) ? (
+                                                        <p className="text-gray-500 text-xs md:text-sm">{formatPrice(item.price)} RSD</p>
+                                                    ) : (
+                                                        <p className="text-red-400 text-xs md:text-sm font-bold">Trenutno nema na stanju</p>
+                                                    )}
                                                 </div>
 
                                                 {/* Quantity Controls */}
@@ -219,11 +229,11 @@ export default function CheckoutModal() {
                                     </div>
 
                                     {/* Recommended Products (Quick Add) */}
-                                    {PRODUCTS.filter(p => !items.some(i => i.id === p.id)).length > 0 && (
+                                    {quickAddProducts.length > 0 && (
                                         <div className="mt-8 pt-6 border-t border-white/10">
                                             <h4 className="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Probaj i ovo (brzo dodavanje)</h4>
                                             <div className="space-y-3">
-                                                {PRODUCTS.filter(p => !items.some(i => i.id === p.id)).map(product => (
+                                                {quickAddProducts.map(product => (
                                                     <div key={product.id} className="flex items-center justify-between bg-white/[0.02] hover:bg-white/[0.05] p-2 pr-4 rounded-xl transition-colors group border border-transparent hover:border-white/5">
                                                         <div className="flex items-center gap-3">
                                                             <div className="w-12 h-12 rounded-lg bg-black/50 flex items-center justify-center p-1">
@@ -258,9 +268,15 @@ export default function CheckoutModal() {
 
                                         {/* Actions */}
                                         <div className="flex flex-col gap-3">
+                                            {unavailableItems.length > 0 && (
+                                                <p className="text-red-400 text-sm text-center">
+                                                    Ukloni iz korpe proizvode kojih trenutno nema na stanju.
+                                                </p>
+                                            )}
                                             <button
                                                 onClick={() => setStep(2)}
-                                                className="w-full bg-primary hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)]"
+                                                disabled={unavailableItems.length > 0}
+                                                className="w-full bg-primary hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary"
                                             >
                                                 NASTAVI NA PORUDŽBINU →
                                             </button>

@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import { fetchOutOfStock } from '@/lib/stock';
 
 export interface CartItem {
     id: string;
@@ -21,6 +22,8 @@ interface CartContextType {
     closeCart: () => void;
     totalPrice: number;
     totalItems: number;
+    isInStock: (id: string) => boolean;
+    refreshStock: () => Promise<string[]>;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -28,8 +31,26 @@ const CartContext = createContext<CartContextType | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [outOfStock, setOutOfStock] = useState<string[]>([]);
+
+    const refreshStock = useCallback(async () => {
+        const ids = await fetchOutOfStock();
+        setOutOfStock(ids);
+        return ids;
+    }, []);
+
+    useEffect(() => {
+        let active = true;
+        fetchOutOfStock().then(ids => {
+            if (active) setOutOfStock(ids);
+        });
+        return () => { active = false; };
+    }, []);
+
+    const isInStock = useCallback((id: string) => !outOfStock.includes(id), [outOfStock]);
 
     const addToCart = useCallback((product: Omit<CartItem, 'quantity'>) => {
+        if (outOfStock.includes(product.id)) return;
         setItems(prev => {
             const existing = prev.find(item => item.id === product.id);
             if (existing) {
@@ -42,7 +63,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             return [...prev, { ...product, quantity: 1 }];
         });
         setIsOpen(true);
-    }, []);
+    }, [outOfStock]);
 
     const removeFromCart = useCallback((id: string) => {
         setItems(prev => prev.filter(item => item.id !== id));
@@ -70,7 +91,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return (
         <CartContext.Provider value={{
             items, isOpen, addToCart, removeFromCart, updateQuantity,
-            clearCart, openCart, closeCart, totalPrice, totalItems
+            clearCart, openCart, closeCart, totalPrice, totalItems,
+            isInStock, refreshStock
         }}>
             {children}
         </CartContext.Provider>
