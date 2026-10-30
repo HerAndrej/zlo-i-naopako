@@ -11,6 +11,7 @@ import Contact from "@/components/sections/Contact";
 import Journey from "@/components/sections/Journey";
 import Founder from "@/components/sections/Founder";
 import Testimonials from "@/components/sections/Testimonials";
+import Partners from "@/components/sections/Partners";
 import Link from "next/link";
 import { Lock } from 'lucide-react';
 import CheckoutModal from "@/components/ui/CheckoutModal";
@@ -125,6 +126,7 @@ export default function Home() {
 
           <Story />
           <Testimonials />
+          <Partners />
           <Contact />
 
           <footer className="py-12 bg-black border-t border-white/5 relative z-10">
