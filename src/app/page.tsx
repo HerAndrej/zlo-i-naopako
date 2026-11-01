@@ -47,7 +47,7 @@ export default function Home() {
         >
           <a href="#" className="flex items-center transition-transform hover:scale-105 duration-300">
             <img
-              src="/logo-zin.png"
+              src="/logo-zin.webp"
               alt="Zlo i Naopako"
               className={`w-auto object-contain transition-all duration-500 ${scrollY > 80 ? 'h-12 md:h-14' : 'h-14 md:h-16'}`}
             />
@@ -133,7 +133,9 @@ export default function Home() {
             <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-6">
               {/* Logo */}
               <img
-                src="/logo-zin.png"
+                loading="lazy"
+                decoding="async"
+                src="/logo-zin.webp"
                 alt="Zlo i Naopako"
                 className="h-16 md:h-20 w-auto object-contain opacity-80"
               />

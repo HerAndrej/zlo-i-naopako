@@ -32,6 +32,8 @@ export default function Partners() {
                             className={`w-full max-w-sm bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 text-center hover:border-white/20 transition-colors reveal-hidden ${isVisible ? `reveal-up stagger-${i + 2}` : ''}`}
                         >
                             <img
+                                loading="lazy"
+                                decoding="async"
                                 src={partner.image}
                                 alt={partner.name}
                                 className="h-64 md:h-80 w-auto max-w-full mx-auto object-contain mb-6"

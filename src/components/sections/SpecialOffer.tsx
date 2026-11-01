@@ -13,7 +13,7 @@ export default function SpecialOffer() {
         addToCart({
             id: 'trio',
             name: 'Trio Paket',
-            image: '/svi.png',
+            image: '/svi.webp',
             price: 1890,
         });
     };
@@ -78,7 +78,9 @@ export default function SpecialOffer() {
                 <div className={`relative group reveal-hidden ${isVisible ? 'reveal-rotate stagger-2' : ''}`}>
                     <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent rounded-full blur-3xl group-hover:bg-primary/30 transition-colors duration-700 animate-glow-pulse" />
                     <img
-                        src="/svi.png"
+                        loading="lazy"
+                        decoding="async"
+                        src="/svi.webp"
                         alt="Trio Paket Soseva"
                         className={`w-full h-auto object-contain relative z-10 hover:scale-105 transition-transform duration-700 drop-shadow-2xl ${isVisible ? 'animate-float' : ''}`}
                     />

@@ -24,7 +24,9 @@ export default function Founder() {
                     <div className={`relative reveal-hidden ${isVisible ? 'reveal-left' : ''}`}>
                         <div className="relative overflow-hidden rounded-2xl md:rounded-3xl">
                             <img
-                                src="/ze.jpeg"
+                                loading="lazy"
+                                decoding="async"
+                                src="/ze.webp"
                                 alt="Aleksandar Davidović — kuvar i osnivač"
                                 className="w-full h-[400px] md:h-[600px] object-cover object-top"
                             />

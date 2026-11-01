@@ -8,37 +8,37 @@ const EVENTS = [
         year: '2021',
         title: 'Početak',
         desc: 'Prvi ljuti sos napravljen slučajno, testiran na prijateljima. Nismo znali šta radimo ali smo znali da je jako dobro.',
-        image: '/1.jpeg'
+        image: '/1.webp'
     },
     {
         year: '2022',
         title: 'Eksperiment',
         desc: 'Probavanje iznova i iznova kako bi se dobio savršen ukus i ljutina. Dosta bačene paprike, dosta nerviranja ali nije bilo odustajanja.',
-        image: '/4.jpeg'
+        image: '/4.webp'
     },
     {
         year: '2023',
         title: 'Širenje',
         desc: 'Eksperimentisanjem dobijamo još 2 ljuta sosa. Nastaju Čongo i Bafalo.',
-        image: '/IMG_20201230_113324.jpg'
+        image: '/prvi-sos.webp'
     },
     {
         year: '2024',
         title: 'Prepoznatljivost',
         desc: 'Zlo dobija svoj identitet. Prvi logo, prve teglice, prve nalepnice. Stižemo do prvih festivala hrane, polica i u ruke ljudi koji prepoznaju kvalitet. Brend raste ali ostaje ručno rađen.',
-        image: '/3.jpeg'
+        image: '/3.webp'
     },
     {
         year: '2025',
         title: 'Evolucija',
         desc: 'Unapredili smo proces, zadržali dobro prepoznatljivi ukus. Ljudi naručuju za sebe, za poklon. Ljutina se širi brže nego ikad.',
-        image: '/2.jpeg'
+        image: '/2.webp'
     },
     {
         year: '2026',
         title: 'Danas',
         desc: 'Mala manufaktura sa velikom pričom u novoj ambalaži. I dalje sve ručno i dalje ukusno ljuto ali sada sa širom zajednicom koja raste svakog dana. Tri sosa, hiljadu zadovoljnih nepaca. I tek smo počeli.',
-        image: '/svi.png'
+        image: '/svi.webp'
     }
 ];
 
@@ -97,6 +97,8 @@ function JourneyItem({ ev, i, isActive }: { ev: typeof EVENTS[0]; i: number; isA
                     `}
                 >
                     <img
+                        loading="lazy"
+                        decoding="async"
                         src={ev.image}
                         alt={ev.title}
                         className={`w-full h-full object-cover transition-transform duration-[2s] ${isActive ? 'scale-110' : 'scale-100'}`}

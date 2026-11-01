@@ -7,21 +7,21 @@ const SECTIONS = [
         id: 'peppers',
         title: 'Nije ljuto samo da bi bolelo.',
         text: 'Mnogi misle da je poenta ljutog sosa da te rasplače. Mi mislimo drugačije. Ljutina je ovde da otvori čula, a ne da ih ugasi. Koristimo isključivo sveže Habanero i Carolina Reaper paprike – bez ekstrakta, bez hemije.',
-        image: '/bg-chilli.png',
+        image: '/bg-chilli.webp',
         highlight: 'Prave paprike'
     },
     {
         id: 'process',
         title: 'Vreme je naš tajni sastojak.',
         text: 'Dobre stvari ne mogu na brzinu. Naš sos Bafalo fermentiše nedeljama dok ne razvije onaj duboki, kompleksni profil koji te tera da probaš još. Strpljenje se oseća u svakoj kapi.',
-        image: '/bg-barrels.png',
+        image: '/bg-barrels.webp',
         highlight: 'Fermentacija'
     },
     {
         id: 'sauces',
         title: 'Trio Fantastico.',
         text: 'Tri karaktera za tri raspoloženja. Smokiša za dimljeni šmek roštilja. Čongo za voćnu eksploziju i energiju. Bafalo za kremasti, puterasti užitak uz krilca.',
-        image: '/svi.png',
+        image: '/svi.webp',
         highlight: 'Tri sveta'
     }
 ];
@@ -62,6 +62,8 @@ export default function Story() {
                     >
                         <div className="absolute inset-0 bg-black/70 md:bg-black/60 z-10" />
                         <img
+                            loading="lazy"
+                            decoding="async"
                             src={section.image}
                             alt={section.title}
                             className={`w-full h-full object-cover transition-transform duration-[8s] ease-out ${idx === activeIndex ? 'scale-110' : 'scale-100'}`}

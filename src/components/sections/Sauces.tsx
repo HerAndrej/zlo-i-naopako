@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { LucideFlame, X } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
@@ -63,9 +63,41 @@ interface SaucesProps {
     onSauceChange: (color: string) => void;
 }
 
+type SosKljuc = keyof typeof SAUCES;
+
+// Link iz reklame bira sos: zloinaopako.com/?sos=congo#sosevi (parametar može da stigne i iza #)
+function sosIzAdrese(): SosKljuc | null {
+    const upitnik = location.hash.indexOf('?');
+    const vrednost = new URLSearchParams(location.search).get('sos')
+        || (upitnik !== -1 ? new URLSearchParams(location.hash.slice(upitnik + 1)).get('sos') : null)
+        || '';
+    const sos = vrednost.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    return Object.hasOwn(SAUCES, sos) ? sos as SosKljuc : null;
+}
+const bezPracenja = () => () => {};
+
 export default function Sauces({ onSauceChange }: SaucesProps) {
-    const [activeSauce, setActiveSauce] = useState<keyof typeof SAUCES>('smokisa');
+    // Na serveru adresa nije poznata (null), pa je početni sos Smokiša; u pregledaču važi ?sos= dok kupac sam ne izabere drugi
+    const izAdrese = useSyncExternalStore(bezPracenja, sosIzAdrese, () => null);
+    const [izabran, setIzabran] = useState<SosKljuc | null>(null);
+    const activeSauce = izabran ?? izAdrese ?? 'smokisa';
     const [isAnimating, setIsAnimating] = useState(false);
+
+    // boja pozadine stranice prati sos iz linka
+    useEffect(() => {
+        if (izAdrese) onSauceChange(SAUCES[izAdrese].color);
+    }, [izAdrese, onSauceChange]);
+
+    // Link iz reklame bez # (?sos=congo) ili sa parametrima iza # (#sosevi?utm_…): pregledač sam ne skroluje do sekcije.
+    // Ponovo i posle učitavanja slika iznad, da sekcija ne pobegne naniže.
+    useEffect(() => {
+        const hes = location.hash;
+        if (hes === '#sosevi' || !(sosIzAdrese() || hes.startsWith('#sosevi'))) return;
+        const doSekcije = () => document.getElementById('sosevi')?.scrollIntoView();
+        doSekcije();
+        window.addEventListener('load', doSekcije, { once: true });
+        return () => window.removeEventListener('load', doSekcije);
+    }, []);
     const [isZoomed, setIsZoomed] = useState(false);
     const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.1 });
 
@@ -80,11 +112,11 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
     }, [isZoomed]);
     const { addToCart, isInStock } = useCart();
 
-    const handleSelect = (key: keyof typeof SAUCES) => {
+    const handleSelect = (key: SosKljuc) => {
         if (key === activeSauce) return;
         setIsAnimating(true);
         setTimeout(() => {
-            setActiveSauce(key);
+            setIzabran(key);
             onSauceChange(SAUCES[key].color);
             setIsAnimating(false);
         }, 300);
@@ -117,7 +149,7 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
             />
 
             {/* Section Title */}
-            <div className={`mb-6 md:mb-12 text-center reveal-hidden ${isVisible ? 'reveal-up' : ''}`}>
+            <div className={`mb-4 md:mb-12 text-center reveal-hidden ${isVisible ? 'reveal-up' : ''}`}>
                 <h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tighter">
                     IZABERI SVOJ <br />
                     <span className="transition-colors duration-500" style={{ color: sauce.color }}>SOS.</span>
@@ -125,8 +157,8 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
             </div>
 
             {/* Sauce Selector — Grid on mobile, flex on desktop */}
-            <div className={`grid grid-cols-2 md:flex md:justify-center gap-2 mb-8 md:mb-16 reveal-hidden ${isVisible ? 'reveal-scale stagger-2' : ''}`}>
-                {(Object.keys(SAUCES) as Array<keyof typeof SAUCES>).map((key) => (
+            <div className={`grid grid-cols-2 md:flex md:justify-center gap-2 mb-4 md:mb-16 reveal-hidden ${isVisible ? 'reveal-scale stagger-2' : ''}`}>
+                {(Object.keys(SAUCES) as Array<SosKljuc>).map((key) => (
                     <button
                         key={key}
                         onClick={() => handleSelect(key)}
@@ -149,7 +181,7 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 w-full max-w-7xl mx-auto items-center">
                 {/* Visual Side (Image) */}
-                <div className="order-1 md:order-2 flex justify-center h-[34vh] md:h-[60vh] relative">
+                <div className="order-1 md:order-2 flex justify-center h-[20vh] md:h-[60vh] relative">
                     <button
                         type="button"
                         onClick={() => setIsZoomed(true)}
@@ -174,25 +206,25 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
                 {/* Info Side */}
                 <div className="order-2 md:order-1 relative z-20">
                     <div
-                        className={`transition-all duration-500 ${isAnimating ? 'opacity-0 translate-x-[-20px]' : 'opacity-100 translate-x-0'}`}
+                        className={`flex flex-col transition-all duration-500 ${isAnimating ? 'opacity-0 translate-x-[-20px]' : 'opacity-100 translate-x-0'}`}
                         style={{ transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)' }}
                     >
-                        <div className={`flex items-baseline gap-3 mb-4 md:mb-6 reveal-hidden ${isVisible ? 'reveal-left stagger-3' : ''}`}>
+                        <div className={`order-1 flex items-baseline gap-3 mb-3 md:mb-6 reveal-hidden ${isVisible ? 'reveal-left stagger-3' : ''}`}>
                             <h3 className="text-3xl md:text-5xl font-black">{sauce.name}</h3>
                             <span className="text-base md:text-xl text-gray-400 font-normal">{sauce.subtitle}</span>
                         </div>
 
                         {/* Accent line in sauce color */}
                         <div
-                            className={`w-12 md:w-16 h-1 mb-5 md:mb-8 ${isVisible ? 'animate-line-grow stagger-4' : 'scale-x-0'}`}
+                            className={`order-2 w-12 md:w-16 h-1 mb-4 md:mb-8 ${isVisible ? 'animate-line-grow stagger-4' : 'scale-x-0'}`}
                             style={{ backgroundColor: sauce.color }}
                         />
 
-                        <p className={`text-sm md:text-base text-gray-300 mb-6 md:mb-10 leading-relaxed font-light reveal-hidden ${isVisible ? 'reveal-left stagger-4' : ''}`}>
+                        <p className={`order-4 md:order-3 text-sm md:text-base text-gray-300 mb-6 md:mb-10 leading-relaxed font-light reveal-hidden ${isVisible ? 'reveal-left stagger-4' : ''}`}>
                             {sauce.description}
                         </p>
 
-                        <div className={`grid grid-cols-2 gap-4 md:gap-8 mb-8 md:mb-12 border-t border-white/10 pt-6 md:pt-8 reveal-hidden ${isVisible ? 'reveal-up stagger-5' : ''}`}>
+                        <div className={`order-5 md:order-4 grid grid-cols-2 gap-4 md:gap-8 md:mb-12 border-t border-white/10 pt-6 md:pt-8 reveal-hidden ${isVisible ? 'reveal-up stagger-5' : ''}`}>
                             <div>
                                 <span className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Ljutina</span>
                                 <div className="flex gap-1">
@@ -211,45 +243,47 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
                                 </div>
                             </div>
                             <div>
-                                <span className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Cena</span>
-                                {isTrio && (sauce as any).oldPrice && (
-                                    <span className="block text-gray-500 line-through text-base">{(sauce as any).oldPrice.toLocaleString('sr-RS')} RSD</span>
-                                )}
-                                <span className="text-2xl md:text-3xl font-bold">{sauce.price.toLocaleString('sr-RS')} <span className="text-sm font-normal text-gray-500">RSD</span></span>
-                                {!inStock && (
-                                    <span className="block text-xs font-bold text-red-400 uppercase tracking-widest mt-2">Trenutno nema na stanju</span>
-                                )}
-                            </div>
-                            <div className="col-span-2">
                                 <span className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Najbolje uz</span>
                                 <span className="text-white text-sm md:text-base">{sauce.bestWith}</span>
                             </div>
                         </div>
 
-                        <button
-                            onClick={handleAddToCart}
-                            disabled={!inStock}
-                            className={`group w-full font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all flex items-center justify-center gap-2 reveal-hidden ${inStock ? 'text-white hover:scale-105' : 'text-gray-400 bg-white/5 border border-white/10 cursor-not-allowed'} ${isVisible ? 'reveal-scale stagger-6' : ''}`}
-                            style={inStock ? {
-                                backgroundColor: sauce.color,
-                                boxShadow: `0 0 30px ${sauce.color}44`
-                            } : {}}
-                            onMouseEnter={(e) => {
-                                if (inStock) e.currentTarget.style.boxShadow = `0 0 40px ${sauce.color}88`;
-                            }}
-                            onMouseLeave={(e) => {
-                                if (inStock) e.currentTarget.style.boxShadow = `0 0 30px ${sauce.color}44`;
-                            }}
-                        >
-                            {inStock ? (
-                                <>
-                                    {isTrio ? 'Naruči Sve' : 'Dodaj u korpu'}
-                                    <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
-                                </>
-                            ) : (
-                                'Trenutno nema na stanju'
-                            )}
-                        </button>
+                        {/* Cena i dugme: na telefonu odmah ispod imena (kupac iz reklame ih vidi bez skrolovanja), na računaru na kraju */}
+                        <div className="order-3 md:order-5 mb-6 md:mb-0">
+                            <div className="flex items-baseline flex-wrap gap-x-3 mb-3 md:mb-4">
+                                {'oldPrice' in sauce && (
+                                    <span className="text-gray-500 line-through text-base">{sauce.oldPrice.toLocaleString('sr-RS')} RSD</span>
+                                )}
+                                <span className="text-2xl md:text-3xl font-bold">{sauce.price.toLocaleString('sr-RS')} <span className="text-sm font-normal text-gray-500">RSD</span></span>
+                                {!inStock && (
+                                    <span className="text-xs font-bold text-red-400 uppercase tracking-widest">Trenutno nema na stanju</span>
+                                )}
+                            </div>
+                            <button
+                                onClick={handleAddToCart}
+                                disabled={!inStock}
+                                className={`group w-full font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all flex items-center justify-center gap-2 reveal-hidden ${inStock ? 'text-white hover:scale-105' : 'text-gray-400 bg-white/5 border border-white/10 cursor-not-allowed'} ${isVisible ? 'reveal-scale stagger-6' : ''}`}
+                                style={inStock ? {
+                                    backgroundColor: sauce.color,
+                                    boxShadow: `0 0 30px ${sauce.color}44`
+                                } : {}}
+                                onMouseEnter={(e) => {
+                                    if (inStock) e.currentTarget.style.boxShadow = `0 0 40px ${sauce.color}88`;
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (inStock) e.currentTarget.style.boxShadow = `0 0 30px ${sauce.color}44`;
+                                }}
+                            >
+                                {inStock ? (
+                                    <>
+                                        {isTrio ? 'Naruči Sve' : 'Dodaj u korpu'}
+                                        <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+                                    </>
+                                ) : (
+                                    'Trenutno nema na stanju'
+                                )}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

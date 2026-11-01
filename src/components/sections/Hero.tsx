@@ -47,7 +47,7 @@ export default function Hero() {
                 <picture className="contents">
                     <source media="(max-width: 767px)" srcSet="/sosevi/trio.webp" />
                     <img
-                        src="/svi.png"
+                        src="/svi.webp"
                         alt="Svi sosevi"
                         className={`w-[90%] md:w-[120%] max-w-none md:-mr-20 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700 ${isVisible ? 'animate-float' : ''}`}
                     />

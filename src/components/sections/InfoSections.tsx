@@ -6,7 +6,9 @@ export function About() {
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 -z-10">
                 <img
-                    src="/bg-chilli.png"
+                    loading="lazy"
+                    decoding="async"
+                    src="/bg-chilli.webp"
                     alt="Chilli peppers"
                     className="w-full h-full object-cover opacity-30"
                 />
@@ -35,7 +37,9 @@ export function Process() {
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 -z-10">
                 <img
-                    src="/bg-barrels.png"
+                    loading="lazy"
+                    decoding="async"
+                    src="/bg-barrels.webp"
                     alt="Barrels"
                     className="w-full h-full object-cover opacity-20"
                 />
