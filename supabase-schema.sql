@@ -205,3 +205,9 @@ ALTER TABLE orders
   ADD COLUMN IF NOT EXISTS fbclid TEXT,
   ADD COLUMN IF NOT EXISTS referrer TEXT,
   ADD COLUMN IF NOT EXISTS landing_at TIMESTAMPTZ;
+
+-- 11. META CONVERSIONS API
+-- ============================================================
+-- Kad je server javio Meti Purchase za porudžbinu (/api/orders/meta); NULL = nije slato.
+ALTER TABLE orders
+  ADD COLUMN IF NOT EXISTS meta_capi_at TIMESTAMPTZ;

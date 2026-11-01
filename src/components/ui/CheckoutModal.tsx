@@ -104,6 +104,14 @@ export default function CheckoutModal() {
                 currency: 'RSD',
             }, orderId);
 
+            // Isti Purchase sa servera (Conversions API), samo za kupce koji su došli sa reklame (fire-and-forget)
+            fetch('/api/orders/meta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId }),
+                keepalive: true,
+            }).catch(err => console.error('Meta CAPI failed:', err));
+
             // 5. Uspeh
             setStep(3);
             clearCart();
