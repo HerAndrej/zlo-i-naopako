@@ -39,7 +39,24 @@ interface Order {
     status: string;
     created_at: string;
     updated_at: string;
+    utm_source: string | null;
+    utm_medium: string | null;
+    utm_campaign: string | null;
+    utm_content: string | null;
+    fbclid: string | null;
+    referrer: string | null;
+    landing_at: string | null;
     items: OrderItem[];
+}
+
+// Odakle je kupac došao; null za porudžbine pre 01.11.2026, kad se izvor nije beležio
+function opisIzvora(order: Order): string | null {
+    if (!order.landing_at) return null;
+    if (order.utm_medium === 'paid_social') return ['Meta reklama', order.utm_content || order.utm_campaign].filter(Boolean).join(' · ');
+    if (order.utm_source) return [order.utm_source, order.utm_campaign].filter(Boolean).join(' · ');
+    if (order.fbclid) return 'Link sa Facebooka ili Instagrama';
+    if (order.referrer) return order.referrer;
+    return 'Direktno';
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -467,6 +484,11 @@ export default function AdminDashboard() {
                                                             <MapPin size={14} className="mt-0.5 shrink-0" />
                                                             <span>{order.customer_address}, {order.customer_city}</span>
                                                         </div>
+                                                        {opisIzvora(order) && (
+                                                            <p className="text-gray-400 text-sm">
+                                                                <span className="text-gray-500">Izvor:</span> {opisIzvora(order)}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                     <p className="text-xs text-gray-600 flex items-center gap-1.5">
                                                         <Clock size={12} />

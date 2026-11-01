@@ -190,3 +190,18 @@ CREATE POLICY "Admins can update product stock"
 
 GRANT SELECT ON product_stock TO anon, authenticated;
 GRANT INSERT, UPDATE ON product_stock TO authenticated;
+
+-- 10. IZVOR PORUDŽBINE (odakle je kupac došao: reklama, Instagram, direktno)
+-- ============================================================
+-- Sajt upisuje uz porudžbinu utm_* i fbclid iz adrese, domen sa kog je kupac došao
+-- i kad je poseta počela (landing_at; uz fbclid daje Metin fbc za Conversions API).
+-- Porudžbine pre 01.11.2026. imaju landing_at = NULL (izvor se tada nije beležio).
+ALTER TABLE orders
+  ADD COLUMN IF NOT EXISTS utm_source TEXT,
+  ADD COLUMN IF NOT EXISTS utm_medium TEXT,
+  ADD COLUMN IF NOT EXISTS utm_campaign TEXT,
+  ADD COLUMN IF NOT EXISTS utm_content TEXT,
+  ADD COLUMN IF NOT EXISTS utm_term TEXT,
+  ADD COLUMN IF NOT EXISTS fbclid TEXT,
+  ADD COLUMN IF NOT EXISTS referrer TEXT,
+  ADD COLUMN IF NOT EXISTS landing_at TIMESTAMPTZ;

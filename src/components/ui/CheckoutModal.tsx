@@ -6,6 +6,7 @@ import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
 import { PRODUCTS } from '@/lib/products';
 import { pratiDogadjaj } from '@/lib/meta';
+import { izvorPorudzbine } from '@/lib/izvor';
 
 export default function CheckoutModal() {
     const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, totalPrice, addToCart, isInStock, refreshStock } = useCart();
@@ -62,6 +63,8 @@ export default function CheckoutModal() {
                     customer_address: formData.address,
                     total_amount: totalPrice,
                     status: 'pending',
+                    // odakle je kupac došao (utm_*, fbclid, referrer, landing_at)
+                    ...izvorPorudzbine(),
                 });
 
             if (orderError) throw orderError;
