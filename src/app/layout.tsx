@@ -11,6 +11,8 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Zlo i naopako - Ljuti sosevi",
   description: "Ručno rađeni ljuti sosevi iz Srbije.",
+  // Meta: potvrda domena za portfelj Zlo i naopako (Business Settings → Brand safety → Domains)
+  verification: { other: { "facebook-domain-verification": "ta0og6v3p9clqixsky2ivof562gbwc" } },
 };
 
 export default function RootLayout({
