@@ -326,8 +326,8 @@ export default function AdminDashboard() {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className="font-bold text-sm truncate">{product.name}</p>
-                                        <p className={`text-xs ${inStock ? 'text-green-400' : 'text-red-400'}`}>
-                                            {inStock ? 'Na stanju' : 'Nema na stanju'}
+                                        <p className={`text-xs ${inStock ? 'text-green-400' : 'text-amber-400'}`}>
+                                            {inStock ? 'Na stanju' : 'Pravi se · rok 7 dana'}
                                         </p>
                                     </div>
                                     <button

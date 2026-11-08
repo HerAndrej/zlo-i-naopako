@@ -53,7 +53,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const isInStock = useCallback((id: string) => !outOfStock.includes(id), [outOfStock]);
 
     const addToCart = useCallback((product: Omit<CartItem, 'quantity'>) => {
-        if (outOfStock.includes(product.id)) return;
         pratiDogadjaj('AddToCart', {
             content_ids: [product.id],
             content_name: product.name,
@@ -73,7 +72,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             return [...prev, { ...product, quantity: 1 }];
         });
         setIsOpen(true);
-    }, [outOfStock]);
+    }, []);
 
     const removeFromCart = useCallback((id: string) => {
         setItems(prev => prev.filter(item => item.id !== id));

@@ -36,6 +36,7 @@ function esc(tekst: string | null | undefined) {
 }
 
 interface OrderItem {
+    product_id: string;
     product_name: string;
     quantity: number;
     unit_price: number;
@@ -70,7 +71,7 @@ async function sendEmail(to: string, subject: string, html: string, replyTo?: st
 
 const brojPorudzbine = (order: OrderRow) => order.id.slice(0, 8).toUpperCase();
 
-function buildCustomerHtml(order: OrderRow, ownerEmail: string): string {
+function buildCustomerHtml(order: OrderRow, ownerEmail: string, sosSePravi: boolean): string {
     const itemsHtml = order.order_items.map(item => `
     <tr style="border-bottom:1px solid #1f1f1f;">
       <td style="padding:12px 0;color:#fff;font-size:15px;">${esc(item.product_name)}</td>
@@ -113,7 +114,9 @@ function buildCustomerHtml(order: OrderRow, ownerEmail: string): string {
   </div>
 
   <div style="text-align:center;padding:20px;background:#1a1a1a;border-radius:8px;">
-    <p style="color:#888;margin:0;font-size:14px;">Plaćanje je <b style="color:#fff;">pouzećem</b> kuriru prilikom preuzimanja. Isporuka je obično u roku od <b style="color:#fff;">1–2 radna dana</b>.</p>
+    <p style="color:#888;margin:0;font-size:14px;">Plaćanje je <b style="color:#fff;">pouzećem</b> kuriru prilikom preuzimanja. ${sosSePravi
+        ? 'Sosevi se upravo prave, pa je rok isporuke <b style="color:#fff;">7 dana</b>.'
+        : 'Isporuka je obično u roku od <b style="color:#fff;">1–2 radna dana</b>.'}</p>
     <p style="color:#888;margin:8px 0 0 0;font-size:13px;">Pitanja? Odgovori na ovaj mejl ili piši na ${esc(ownerEmail)}.</p>
   </div>
 
@@ -187,7 +190,7 @@ export async function POST(req: NextRequest) {
         .select(`
       id, customer_name, customer_email, customer_phone, customer_address, customer_city,
       total_amount, created_at,
-      order_items ( product_name, quantity, unit_price, total_price )
+      order_items ( product_id, product_name, quantity, unit_price, total_price )
     `)
         .eq('id', orderId)
         .single();
@@ -225,6 +228,13 @@ export async function POST(req: NextRequest) {
         .single();
     if (settingsData?.value) ownerEmail = settingsData.value;
 
+    // Rok isporuke: 7 dana ako se bar jedan poručeni sos još pravi (ako stanje ne može da se pročita, duži rok)
+    const { data: uIzradi, error: stanjeError } = await supabase
+        .from('product_stock')
+        .select('product_id')
+        .eq('in_stock', false);
+    const sosSePravi = !!stanjeError || order.order_items.some(s => uIzradi?.some(p => p.product_id === s.product_id));
+
     const customerTo = EMAIL_TEST_PRIMALAC || order.customer_email;
     const ownerTo = EMAIL_TEST_PRIMALAC || ownerEmail;
     const customerSubject = `✅ Potvrda porudžbine #${brojPorudzbine(order)} – Zlo i naopako`;
@@ -232,7 +242,7 @@ export async function POST(req: NextRequest) {
 
     // 4. Oba mejla paralelno; kupac odgovorom piše vlasniku
     const [customerResult, ownerResult] = await Promise.allSettled([
-        sendEmail(customerTo, customerSubject, buildCustomerHtml(order, ownerEmail), ownerEmail),
+        sendEmail(customerTo, customerSubject, buildCustomerHtml(order, ownerEmail, sosSePravi), ownerEmail),
         sendEmail(ownerTo, ownerSubject, buildOwnerHtml(order), order.customer_email),
     ]);
 

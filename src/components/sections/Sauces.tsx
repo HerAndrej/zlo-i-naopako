@@ -256,32 +256,25 @@ export default function Sauces({ onSauceChange }: SaucesProps) {
                                 )}
                                 <span className="text-2xl md:text-3xl font-bold">{sauce.price.toLocaleString('sr-RS')} <span className="text-sm font-normal text-gray-500">RSD</span></span>
                                 {!inStock && (
-                                    <span className="text-xs font-bold text-red-400 uppercase tracking-widest">Trenutno nema na stanju</span>
+                                    <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Rok isporuke 7 dana · {isTrio ? 'sosevi se prave' : 'sos se pravi'}</span>
                                 )}
                             </div>
                             <button
                                 onClick={handleAddToCart}
-                                disabled={!inStock}
-                                className={`group w-full font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all flex items-center justify-center gap-2 reveal-hidden ${inStock ? 'text-white hover:scale-105' : 'text-gray-400 bg-white/5 border border-white/10 cursor-not-allowed'} ${isVisible ? 'reveal-scale stagger-6' : ''}`}
-                                style={inStock ? {
+                                className={`group w-full font-black text-base md:text-lg py-3.5 md:py-4 px-8 md:px-12 rounded-full transition-all flex items-center justify-center gap-2 reveal-hidden text-white hover:scale-105 ${isVisible ? 'reveal-scale stagger-6' : ''}`}
+                                style={{
                                     backgroundColor: sauce.color,
                                     boxShadow: `0 0 30px ${sauce.color}44`
-                                } : {}}
+                                }}
                                 onMouseEnter={(e) => {
-                                    if (inStock) e.currentTarget.style.boxShadow = `0 0 40px ${sauce.color}88`;
+                                    e.currentTarget.style.boxShadow = `0 0 40px ${sauce.color}88`;
                                 }}
                                 onMouseLeave={(e) => {
-                                    if (inStock) e.currentTarget.style.boxShadow = `0 0 30px ${sauce.color}44`;
+                                    e.currentTarget.style.boxShadow = `0 0 30px ${sauce.color}44`;
                                 }}
                             >
-                                {inStock ? (
-                                    <>
-                                        {isTrio ? 'Naruči Sve' : 'Dodaj u korpu'}
-                                        <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
-                                    </>
-                                ) : (
-                                    'Trenutno nema na stanju'
-                                )}
+                                {isTrio ? 'Naruči Sve' : 'Dodaj u korpu'}
+                                <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
                             </button>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 
-// Vraća id-jeve proizvoda koji trenutno nisu na stanju.
-// Ako čitanje ne uspe, ništa se ne blokira da prodaja ne bi stala.
+// Vraća id-jeve proizvoda koji se trenutno prave: mogu da se poruče, ali je rok isporuke 7 dana.
+// Ako čitanje ne uspe, vraća praznu listu.
 export async function fetchOutOfStock(): Promise<string[]> {
     const { data, error } = await supabase
         .from('product_stock')

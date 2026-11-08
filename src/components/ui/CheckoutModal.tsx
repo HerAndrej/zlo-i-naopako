@@ -32,8 +32,8 @@ export default function CheckoutModal() {
 
     if (!isOpen) return null;
 
-    const unavailableItems = items.filter(item => !isInStock(item.id));
-    const quickAddProducts = PRODUCTS.filter(p => !items.some(i => i.id === p.id) && isInStock(p.id));
+    const imaSosKojiSePravi = items.some(item => !isInStock(item.id));
+    const quickAddProducts = PRODUCTS.filter(p => !items.some(i => i.id === p.id));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -41,14 +41,6 @@ export default function CheckoutModal() {
         setError('');
 
         try {
-            // 0. Proveri stanje neposredno pre slanja (admin je možda u međuvremenu isključio proizvod)
-            const outOfStock = await refreshStock();
-            const unavailable = items.filter(item => outOfStock.includes(item.id));
-            if (unavailable.length > 0) {
-                setError(`${unavailable.map(i => i.name).join(', ')}: trenutno nema na stanju. Vrati se na korpu i ukloni ${unavailable.length === 1 ? 'ga' : 'ih'}.`);
-                return;
-            }
-
             // 1. Generiši UUID za narudžbinu (da izbegnemo RLS select problem)
             const orderId = crypto.randomUUID();
 
@@ -210,10 +202,9 @@ export default function CheckoutModal() {
                                                 {/* Product Info */}
                                                 <div className="flex-1 min-w-0">
                                                     <h4 className="font-bold text-white text-sm md:text-base truncate">{item.name}</h4>
-                                                    {isInStock(item.id) ? (
-                                                        <p className="text-gray-500 text-xs md:text-sm">{formatPrice(item.price)} RSD</p>
-                                                    ) : (
-                                                        <p className="text-red-400 text-xs md:text-sm font-bold">Trenutno nema na stanju</p>
+                                                    <p className="text-gray-500 text-xs md:text-sm">{formatPrice(item.price)} RSD</p>
+                                                    {!isInStock(item.id) && (
+                                                        <p className="text-amber-400 text-xs font-bold">Rok isporuke 7 dana</p>
                                                     )}
                                                 </div>
 
@@ -290,9 +281,9 @@ export default function CheckoutModal() {
 
                                         {/* Actions */}
                                         <div className="flex flex-col gap-3">
-                                            {unavailableItems.length > 0 && (
-                                                <p className="text-red-400 text-sm text-center">
-                                                    Ukloni iz korpe proizvode kojih trenutno nema na stanju.
+                                            {imaSosKojiSePravi && (
+                                                <p className="text-amber-400 text-sm text-center">
+                                                    Sosevi se upravo prave, pa je rok isporuke 7 dana.
                                                 </p>
                                             )}
                                             <button
@@ -305,8 +296,7 @@ export default function CheckoutModal() {
                                                     });
                                                     setStep(2);
                                                 }}
-                                                disabled={unavailableItems.length > 0}
-                                                className="w-full bg-primary hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary"
+                                                className="w-full bg-primary hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)]"
                                             >
                                                 NASTAVI NA PORUDŽBINU →
                                             </button>
@@ -327,7 +317,7 @@ export default function CheckoutModal() {
                     {step === 2 && (
                         <div className="p-6">
                             <div className="mb-6 text-center">
-                                <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Brza Isporuka</span>
+                                <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">{imaSosKojiSePravi ? 'Isporuka za 7 dana' : 'Brza Isporuka'}</span>
                                 <h3 className="text-2xl font-black text-white mb-1">Unesi podatke</h3>
                                 <p className="text-gray-500 text-sm">
                                     {items.length} {items.length === 1 ? 'proizvod' : items.length < 5 ? 'proizvoda' : 'proizvoda'} · <span className="text-white font-bold">{formatPrice(totalPrice)} RSD</span>
@@ -406,7 +396,7 @@ export default function CheckoutModal() {
                                 <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex gap-3 items-start">
                                     <div className="mt-1"><Check size={16} className="text-primary" /></div>
                                     <p className="text-xs text-gray-400 leading-relaxed">
-                                        Plaćanje se vrši <strong className="text-white">pouzećem</strong> kuriru prilikom preuzimanja. Isporuka je obično u roku od 1-2 radna dana.
+                                        Plaćanje se vrši <strong className="text-white">pouzećem</strong> kuriru prilikom preuzimanja. {imaSosKojiSePravi ? 'Sosevi se upravo prave, pa je rok isporuke 7 dana.' : 'Isporuka je obično u roku od 1-2 radna dana.'}
                                     </p>
                                 </div>
 
