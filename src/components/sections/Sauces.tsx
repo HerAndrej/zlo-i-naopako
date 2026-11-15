@@ -18,7 +18,7 @@ const SAUCES = {
         image: '/sosevi/smokisa.webp',
         heat: 3,
         bestWith: 'burger, krompiriće, sendviče, jaja, roštilj.',
-        price: 650
+        price: 750
     },
     congo: {
         id: 'congo',
@@ -30,7 +30,7 @@ const SAUCES = {
         image: '/sosevi/congo.webp',
         heat: 4,
         bestWith: 'tacos, piletinu, pizzu, testeninu, grilovano povrće.',
-        price: 700
+        price: 800
     },
     bafalo: {
         id: 'bafalo',
@@ -42,7 +42,7 @@ const SAUCES = {
         image: '/sosevi/bafalo.webp',
         heat: 3,
         bestWith: 'pileća krilca, burger, onion rings, pržene krompiriće, sendviče.',
-        price: 750
+        price: 850
     },
     trio: {
         id: 'trio',
@@ -54,8 +54,8 @@ const SAUCES = {
         image: '/sosevi/trio.webp',
         heat: 5,
         bestWith: 'bukvalno sve. Od doručka do večere, od roštilja do pizze.',
-        price: 1890,
-        oldPrice: 2100
+        price: 1990,
+        oldPrice: 2400
     }
 };
 

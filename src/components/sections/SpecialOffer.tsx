@@ -14,7 +14,7 @@ export default function SpecialOffer() {
             id: 'trio',
             name: 'Trio Paket',
             image: '/svi.webp',
-            price: 1890,
+            price: 1990,
         });
     };
 
@@ -60,8 +60,8 @@ export default function SpecialOffer() {
 
                     <div className={`flex flex-col md:flex-row items-center gap-6 justify-center lg:justify-start reveal-hidden ${isVisible ? 'reveal-up stagger-6' : ''}`}>
                         <div className="text-center md:text-left">
-                            <span className="block text-gray-500 decoration-primary/50 line-through text-lg">2.100 RSD</span>
-                            <span className="block text-5xl font-black text-white">1.890 <span className="text-lg font-normal text-gray-400">RSD</span></span>
+                            <span className="block text-gray-500 decoration-primary/50 line-through text-lg">2.400 RSD</span>
+                            <span className="block text-5xl font-black text-white">1.990 <span className="text-lg font-normal text-gray-400">RSD</span></span>
                         </div>
 
                         <button
